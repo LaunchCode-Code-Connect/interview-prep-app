@@ -29,7 +29,7 @@ function App() {
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <Link className="navbar-brand ms-4 nav-link" to="/">
-          User Behavior Data
+          Behavioral Interview Prep
         </Link>
         <button
           className="navbar-toggler"
@@ -46,7 +46,7 @@ function App() {
           <ul className="navbar-nav">
             <li className="nav-item">
               <Link className="nav-link" to="/search">
-                Search Through Dataset
+                Search Through Question Bank
               </Link>
             </li>
           </ul>
