@@ -1,8 +1,8 @@
 const dataFields = {
-  question_id: "Question ID",
-  type_of_question: "Question Type",
-  question_text: "Question Text",
-  example_answer: "Example Answer",
+  question_id: "question_id",
+  type_of_question: "type_of_question",
+  question_text: "question_text",
+  example_answer: "example_answer",
 };
 
 export default dataFields;

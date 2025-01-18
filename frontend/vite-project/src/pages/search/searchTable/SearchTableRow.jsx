@@ -1,20 +1,27 @@
 import dataFields from "./dataFields";
+import { useNavigate } from "react-router-dom";
 
 function SearchResultTableRows({ data }) {
+  const navigate = useNavigate();
+
+  // Handler for row click
+  const handleRowClick = (id) => {
+    navigate(`/question/${id}`);
+  };
   return data.map((record) => {
+    console.log(record)
+    const { question_id } = record;
+    console.log(question_id)
     return (
-      <tr key={record[dataFields["id"]]}>
-        <td>{record[dataFields["id"]]}</td>
-        <td>{record[dataFields["model"]]}</td>
-        <td>{record[dataFields["opSystem"]]}</td>
-        <td>{record[dataFields["appUsageTime"]]}</td>
-        <td>{record[dataFields["screenOnTime"]]}</td>
-        <td>{record[dataFields["batteryDrain"]]}</td>
-        <td>{record[dataFields["numApps"]]}</td>
-        <td>{record[dataFields["dataUsage"]]}</td>
-        <td>{record[dataFields["age"]]}</td>
-        <td>{record[dataFields["gender"]]}</td>
-        <td>{record[dataFields["userBehavior"]]}</td>
+      <tr
+        key={question_id}
+        id={question_id}
+        onClick={() => handleRowClick(question_id)}
+      >
+        <td>{question_id}</td>
+        <td>{record[dataFields["question_text"]]}</td>
+        <td>{record[dataFields["type_of_question"]]}</td>
+        <td>{record[dataFields["example_answer"]]}</td>
       </tr>
     );
   });

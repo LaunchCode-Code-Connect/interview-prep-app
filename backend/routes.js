@@ -4,9 +4,49 @@ const fs = require("fs");
 const path = require("path");
 
 // Adjust this path to match your directory structure
-const ANSWERS_FILE_PATH = path.join(__dirname, "user-data", "user-answers.json");
+const ANSWERS_FILE_PATH = path.join(
+  __dirname,
+  "user-data",
+  "user-answers.json"
+);
+const QUESTIONS_FILE_PATH = path.join(
+  __dirname,
+  "question-bank",
+  "entry-level-software-dev.json"
+);
 
-const router = express.Router()
+const router = express.Router();
+
+const rawData = fs.readFileSync(QUESTIONS_FILE_PATH, "utf8");
+const question_records = JSON.parse(rawData);
+
+router.get("/search", (req, res) => {
+  try {
+    // Read JSON file from disk
+
+    // If you want to optionally filter records using query params, you can do so here.
+    // For example:
+
+    // Question Types
+    // "all",
+    // "software-dev",
+    // "data-or-bi-analyst",
+    // "launchcode-specific",
+    // "important-general-questions",
+
+    // let { type } = req.query;
+    // if (type) {
+    //   // Filter or find
+    //   records = records.filter(r => r.type_of_question === type);
+    // }
+
+    // Return the records as JSON
+    res.json(question_records);
+  } catch (error) {
+    console.error("Error reading JSON file:", error);
+    res.status(500).json({ error: "Could not retrieve records." });
+  }
+});
 
 // Example route to save data
 router.post("/save-star", (req, res) => {
@@ -22,7 +62,7 @@ router.post("/save-star", (req, res) => {
       action_text,
       response_text,
       question_id,
-      date_updated
+      date_updated,
     } = req.body;
 
     // 3) Find if it already exists
@@ -37,7 +77,7 @@ router.post("/save-star", (req, res) => {
       action_text,
       response_text,
       question_id,
-      date_updated
+      date_updated,
     };
 
     if (existingIndex !== -1) {
@@ -47,7 +87,11 @@ router.post("/save-star", (req, res) => {
     }
 
     // 5) Write back to file
-    fs.writeFileSync(ANSWERS_FILE_PATH, JSON.stringify(answers, null, 2), "utf8");
+    fs.writeFileSync(
+      ANSWERS_FILE_PATH,
+      JSON.stringify(answers, null, 2),
+      "utf8"
+    );
 
     res.json({ success: true });
   } catch (error) {
@@ -56,5 +100,26 @@ router.post("/save-star", (req, res) => {
   }
 });
 
+router.get("/questions/:id", (req, res) => {
+  try {
+    const id = Number(req.params.id);
+    console.log("getting id")
+    console.log(id)
+    const question_record = question_records.filter(
+      (o) =>  o["question_id"] === id
+    );
 
-module.exports = router
+    console.log(question_record)
+
+    if (question_record.length > 0) {
+      return res.send(question_record);
+    } else {
+      res.send({});
+    }
+  } catch (error) {
+    console.error("Error reading JSON file:", error);
+    res.status(500).json({ error: "Could not retrieve records." });
+  }
+});
+
+module.exports = router;

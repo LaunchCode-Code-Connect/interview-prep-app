@@ -1,1 +1,1 @@
-export default "/api/data";
+export default "/api/";

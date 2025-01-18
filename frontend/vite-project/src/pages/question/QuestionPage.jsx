@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
+import { useParams } from "react-router-dom";
 import { ReactMediaRecorder } from "react-media-recorder";
 import WaveSurfer from "wavesurfer.js";
-// If you're using React Router for reading URL params:
-import { useParams } from "react-router-dom";
 
-function InterviewQuestion({ question_text }) {
-  question_text = "Hello!";
+function InterviewQuestion() {
+  // ------------- State ----------------
+  const [questionText, setQuestionText] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [showTimer, setShowTimer] = useState(false);
@@ -17,10 +17,39 @@ function InterviewQuestion({ question_text }) {
   const [action, setAction] = useState("");
   const [response, setResponse] = useState("");
 
-  // Example: If using React Router to fetch question_id from the URL
-  const { id: question_id } = useParams(); // e.g. /question/123 => question_id= "123"
+  // Get the "id" parameter from the URL
+  const { id: question_id } = useParams();
 
-  /* ----- Timer Logic ----- */
+  // ------------- On Component Mount (Fetch Question) -------------
+  useEffect(() => {
+    const getQuestion = async (qId) => {
+      try {
+        // Example: /api/questions/:id
+        const res = await fetch(`/api/questions/${qId}`);
+        if (!res.ok) {
+          throw new Error("Failed to load question data");
+        }
+        const data = await res.json();
+        console.log(data)
+        if (data.length > 0){
+            setQuestionText(data[0].question_text || "");
+        } else {
+            setQuestionText("No Question exists for that id")
+        }
+        // data might be { question_id: '123', question_text: '...' }
+
+      } catch (error) {
+        console.error("Error fetching question:", error);
+      }
+    };
+
+    // Call the function to fetch question data
+    if (question_id) {
+      getQuestion(question_id);
+    }
+  }, [question_id]);
+
+  // ------------- Timer Logic -------------
   useEffect(() => {
     if (timeRemaining === null || timeRemaining < 0) return;
     const timer = setInterval(() => {
@@ -35,13 +64,13 @@ function InterviewQuestion({ question_text }) {
     return `${mm}:${ss < 10 ? "0" + ss : ss}`;
   };
 
-  /* ----- Speech Synthesis ----- */
+  // ------------- Speech Synthesis -------------
   const handleSpeak = () => {
     if (!("speechSynthesis" in window)) {
       alert("Text-to-speech is not supported in this browser.");
       return;
     }
-    const utterance = new SpeechSynthesisUtterance(question_text);
+    const utterance = new SpeechSynthesisUtterance(questionText);
     setIsSpeaking(true);
 
     utterance.onend = () => {
@@ -53,13 +82,14 @@ function InterviewQuestion({ question_text }) {
     window.speechSynthesis.speak(utterance);
   };
 
+  // ------------- "Ready to Answer" -------------
   const handleReadyToAnswer = () => {
     setShowTimer(false);
     setTimeRemaining(null);
     setShowAudioRecorder(true);
   };
 
-  /* ----- Save STAR Text ----- */
+  // ------------- Save STAR Text -------------
   const handleSaveStarText = async () => {
     // Format date as MM/DD/YYYY
     const now = new Date();
@@ -97,9 +127,9 @@ function InterviewQuestion({ question_text }) {
 
   return (
     <div className="container my-4">
-      <h3 className="mb-3">{question_text}</h3>
+      <h3 className="mb-3">{questionText}</h3>
 
-      {/* Text areas with two columns per row */}
+      {/* Text areas */}
       <div className="row g-3 mb-3">
         <div className="col-md-6">
           <label htmlFor="situation" className="form-label">
@@ -154,17 +184,12 @@ function InterviewQuestion({ question_text }) {
         </div>
       </div>
 
-      {/* Save STAR Text Button */}
       <div className="mb-3">
-        <button className="btn btn-info" onClick={handleSaveStarText}>
+        <button className="btn btn-info me-2" onClick={handleSaveStarText}>
           Save STAR Text
         </button>
-      </div>
-
-      {/* Speak Question Button */}
-      <div className="mb-3">
         <button
-          className="btn btn-primary me-2"
+          className="btn btn-primary"
           onClick={handleSpeak}
           disabled={isSpeaking}
         >
@@ -184,7 +209,6 @@ function InterviewQuestion({ question_text }) {
         </div>
       )}
 
-      {/* Audio Recorder (once user clicks Ready to Answer) */}
       {showAudioRecorder && <AudioRecorder />}
     </div>
   );
@@ -192,21 +216,20 @@ function InterviewQuestion({ question_text }) {
 
 export default InterviewQuestion;
 
-/* -------------------------------------------------------- */
-/*     Audio Recorder Component with Bootstrap Styling      */
-/* -------------------------------------------------------- */
+/* ----------------------------------- */
+/*        Audio Recorder Component     */
+/* ----------------------------------- */
 
 function AudioRecorder() {
   const waveSurferRef = useRef(null);
   const [waveSurfer, setWaveSurfer] = useState(null);
 
-  // Initialize WaveSurfer once on mount
   useEffect(() => {
     if (!waveSurferRef.current) {
       waveSurferRef.current = WaveSurfer.create({
         container: "#waveform",
         waveColor: "#ccc",
-        progressColor: "#0d6efd", // Use a bootstrap-like color for the progress
+        progressColor: "#0d6efd", // a bootstrap-like color
         cursorColor: "#999",
         barWidth: 2,
         barRadius: 2,
@@ -230,16 +253,17 @@ function AudioRecorder() {
             resumeRecording,
             mediaBlobUrl,
           }) => {
-            // Whenever the blob url updates, load it into WaveSurfer
+            // Load audio into WaveSurfer once we have a URL
             useEffect(() => {
               if (waveSurfer && mediaBlobUrl) {
                 waveSurfer.load(mediaBlobUrl);
               }
             }, [mediaBlobUrl, waveSurfer]);
 
+            // Playback via WaveSurfer
             const handlePlayback = () => {
               if (waveSurfer) {
-                waveSurfer.playPause(); // toggles play/pause
+                waveSurfer.playPause();
               }
             };
 
@@ -276,10 +300,8 @@ function AudioRecorder() {
                   </button>
                 </div>
 
-                {/* Waveform container */}
                 <div id="waveform" className="mb-3" />
 
-                {/* Optional native audio element for convenience */}
                 {mediaBlobUrl && (
                   <audio src={mediaBlobUrl} controls className="w-100 mt-2" />
                 )}

@@ -2,13 +2,11 @@ import baseUrl from "./baseUrl";
 
 let url = baseUrl + "/search";
 
-export async function getSearchResults(filterType, keyword) {
+export async function getSearchResults(questionType) {
   let queryUrl = url + "?";
 
-  if (filterType) {
-    if (keyword) {
-      queryUrl += `filterType=${filterType}&keyword=${keyword}`;
-    }
+  if (questionType) {
+      queryUrl += `type=${questionType}`;
   }
 
   const response = await fetch(queryUrl);

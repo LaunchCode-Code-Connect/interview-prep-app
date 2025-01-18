@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Routes, Route, Link } from "react-router-dom";
 import SearchPage from "./pages/search/SearchPage";
 import AboutPage from "./pages/about/AboutPage";
@@ -24,6 +24,27 @@ function App() {
       setLoading(false);
     }
   };
+
+   useEffect(() => {
+      const getResults= async () => {
+        try {
+          // Example: /api/questions/:id
+          const res = await fetch(`/api/search/`);
+          if (!res.ok) {
+            throw new Error("Failed to load question data");
+          }
+          const data = await res.json();
+          setData(data)
+          // data might be { question_id: '123', question_text: '...' }
+  
+        } catch (error) {
+          console.error("Error fetching questions:", error);
+        }
+      };
+  
+      // Call the function to fetch question data
+      getResults()
+    }, []);
 
   return (
     <div>
@@ -67,7 +88,7 @@ function App() {
             />
           }
         />
-        <Route path="/question/:id" element={<InterviewQuestion/>}/>
+        <Route path="/question/:id" element={<InterviewQuestion questions={data}/>}/>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

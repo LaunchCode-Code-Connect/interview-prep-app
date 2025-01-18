@@ -3,12 +3,11 @@ import Select from "../../components/Select";
 
 export default function SearchBar({ onSearch }) {
   const filterTypeOptions = [
-    "All",
-    "Software Dev",
-    "Data/Business Intelligence Analyst",
-    "LaunchCode Specific",
-    "General",
-
+    "all",
+    "software-dev",
+    "data-or-bi-analyst",
+    "launchcode-specific",
+    "important-general-questions",
   ];
   const [keyword, setKeyword] = useState("");
   const [filterType, setFilterType] = useState(filterTypeOptions[0]);
