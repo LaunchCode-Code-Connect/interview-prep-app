@@ -1,0 +1,303 @@
+[
+    {
+      "question_id": 1,
+      "question_text": "Describe a time when you encountered a challenging bug. How did you handle it?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I was working on a web application where a form submission repeatedly failed without a clear error message. Action: I added detailed logging around the form submission function, then used a debugger to step through the code line by line. Response: I discovered a missing parameter in the API call, fixed it, and the form began submitting successfully."
+    },
+    {
+      "question_id": 2,
+      "question_text": "Tell me about a project where you learned a new programming language or framework quickly.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My team needed a quick prototype built with a new front-end framework for a client demo. Action: I read the official documentation, took a few tutorials, and created small test components to understand the framework’s fundamentals. Response: Within a week, I delivered a functional prototype that impressed the client and showcased our adaptability."
+    },
+    {
+      "question_id": 3,
+      "question_text": "Can you share an example of when you worked as part of a team to solve a coding challenge?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My university group had to build a mobile app in just two weeks. Action: We assigned clear roles, held daily stand-ups, and did frequent code reviews to quickly identify problems. Response: The open communication and shared responsibilities enabled us to finish the project on time and receive top marks for collaboration."
+    },
+    {
+      "question_id": 4,
+      "question_text": "Describe a time you had to give or receive feedback on your code. How did you respond?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: In an internship, a senior developer commented that my code readability could improve. Action: I asked clarifying questions, then refactored my code using recommended naming conventions and style guidelines. Response: After implementing the feedback, my pull requests were approved more quickly, and I built trust with the team."
+    },
+    {
+      "question_id": 5,
+      "question_text": "Explain a situation where you had to handle conflicting priorities on a project.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: A manager wanted a new feature implemented, while QA required bug fixes before release. Action: I communicated with both stakeholders, estimated the time for each task, and proposed a compromise on delivery dates. Response: The solution allowed us to fix critical bugs first and still meet the timeline for the new feature rollout."
+    },
+    {
+      "question_id": 6,
+      "question_text": "Tell me about a time you failed to meet a deadline. What happened, and what did you learn?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: During a class project, I underestimated the complexity of integrating an external API. Action: I rushed at the end and still couldn’t finish by the original due date. Response: I learned to buffer additional time for new technologies, communicate hurdles sooner, and break tasks into smaller, testable chunks."
+    },
+    {
+      "question_id": 7,
+      "question_text": "Describe a time you had to debug a complex piece of code under pressure.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: During a hackathon, our team’s main feature started crashing minutes before the final demo. Action: I systematically commented out segments of the code to isolate the problem and used console logs to trace variable values. Response: We identified a null pointer error, quickly patched it, and successfully demonstrated our app to the judges."
+    },
+    {
+      "question_id": 8,
+      "question_text": "How do you approach learning new technologies? Provide an example of when this helped you in a project.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My group needed to build a feature using a library we hadn’t used before. Action: I explored official documentation, watched tutorial videos, and created a minimal proof of concept. Response: By understanding the library’s core components, we integrated it smoothly and delivered a robust, new feature on time."
+    },
+    {
+      "question_id": 9,
+      "question_text": "Can you talk about a time you had to pivot or change direction mid-project?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Midway through a data analytics project, the client changed the requirements from one framework to another. Action: I migrated our existing data models, updated dependencies, and reassigned tasks based on the new workflow. Response: Despite the sudden pivot, we adapted and completed the project, satisfying the new client specification."
+    },
+    {
+      "question_id": 10,
+      "question_text": "Give an example of when you had to optimize code for better performance.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: A web API endpoint was taking over 10 seconds to respond, frustrating users. Action: I profiled the code, replaced nested loops with more efficient data structures, and added database indexes. Response: The endpoint’s response time improved to under 2 seconds, leading to better user satisfaction."
+    },
+    {
+      "question_id": 11,
+      "question_text": "Tell me about a time you encountered a major merge conflict. How did you resolve it?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Two teammates and I worked on the same file, leading to significant code overlap and inconsistent logic. Action: I carefully reviewed each conflicting section, communicated with both teammates about intended functionality, and manually merged changes. Response: Although time-consuming, we maintained code integrity, updated our branch strategy, and prevented similar conflicts."
+    },
+    {
+      "question_id": 12,
+      "question_text": "Describe an instance when you disagreed with a peer or supervisor about a technical approach.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My supervisor suggested using a large framework for a simple feature, while I believed a lightweight library was sufficient. Action: I presented performance comparisons, complexity trade-offs, and relevant examples. Response: We reached a compromise on a moderately sized library that met performance needs without excessive overhead."
+    },
+    {
+      "question_id": 13,
+      "question_text": "Explain a time you faced a deadline crunch. How did you manage your time?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our client requested a feature update only a few days before a product launch. Action: I listed all required tasks, prioritized them by impact, and communicated daily progress with my team. Response: The focus on high-priority tasks and transparent updates allowed us to meet the deadline with a stable release."
+    },
+    {
+      "question_id": 14,
+      "question_text": "When did you have to communicate a complex technical concept to a non-technical stakeholder?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My product owner was unfamiliar with the idea of asynchronous programming for a web app feature. Action: I created simple diagrams and analogies to show how async requests are handled without blocking. Response: They understood the concept, approved the approach, and we implemented the feature smoothly."
+    },
+    {
+      "question_id": 15,
+      "question_text": "Share a moment when you mentored or guided a peer in your coding group.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: A junior teammate struggled with Git branching and merging. Action: I scheduled a one-on-one session, walked them through a hands-on tutorial, and provided them with reference documentation. Response: They became more confident in Git and avoided common merge pitfalls in subsequent sprints."
+    },
+    {
+      "question_id": 16,
+      "question_text": "Talk about a scenario where you struggled with a particular algorithm or data structure. How did you overcome it?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Implementing a trie data structure for an autocomplete feature was new to me. Action: I broke down each method (insertion, search, delete) into smaller steps and tested them individually. Response: Gradually mastering each function allowed me to successfully integrate the trie, improving our autocomplete performance."
+    },
+    {
+      "question_id": 17,
+      "question_text": "Provide an example of how you handle repetitive or mundane coding tasks.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our tests required entering the same data scenario multiple times. Action: I wrote a small script to automatically generate the test data, saving me from manual entry. Response: The automation reduced errors and freed up time for more complex problem-solving."
+    },
+    {
+      "question_id": 18,
+      "question_text": "Describe a time you took initiative to improve a process or tool in your project.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our build process was lengthy and done manually each time. Action: I introduced a continuous integration pipeline that automated builds and tests on each commit. Response: This significantly reduced build times and prevented integration issues, boosting overall team productivity."
+    },
+    {
+      "question_id": 19,
+      "question_text": "Explain a situation where you needed to refactor code for better readability or maintainability.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: The legacy login module had grown cluttered with conditional checks. Action: I reorganized the code, extracted reusable functions, and improved naming conventions. Response: The refactored module became easier to modify, decreasing onboarding time for new developers."
+    },
+    {
+      "question_id": 20,
+      "question_text": "Can you share an experience of how you managed multiple bugs or tasks at once?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I had a backlog of minor UI bugs alongside a critical API fix. Action: I used a task board to prioritize urgent issues first, then assigned smaller bugs in between. Response: The visual organization helped me address the critical defect without neglecting smaller tasks, ensuring consistent progress."
+    },
+    {
+      "question_id": 21,
+      "question_text": "Talk about a time you made a mistake in your code that affected others.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My change to a shared utility function accidentally broke several dependent modules. Action: I immediately notified the team, reverted the changes, and wrote additional unit tests to catch similar mistakes. Response: Although it caused a temporary delay, the experience reinforced the importance of thorough testing and clear communication."
+    },
+    {
+      "question_id": 22,
+      "question_text": "Give an example of when you had to quickly adapt to a new software environment or DevOps tool.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My internship required deploying code to a Kubernetes cluster, which I had never used before. Action: I consulted the documentation, followed a step-by-step tutorial, and deployed a small test service first. Response: Gaining basic proficiency in Kubernetes allowed me to manage deployments effectively and support my team’s operations."
+    },
+    {
+      "question_id": 23,
+      "question_text": "Tell me about a time you had to present your work to a larger audience or leadership.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I was selected to showcase our new feature at a departmental meeting. Action: I prepared a concise demo, highlighting user benefits and the underlying tech stack. Response: My clear presentation helped the leadership team understand the feature’s value, and we got the green light for broader rollout."
+    },
+    {
+      "question_id": 24,
+      "question_text": "Describe how you overcame an obstacle during a group software project or hackathon.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My team realized we lacked a back-end specialist at a 24-hour hackathon. Action: I volunteered to quickly set up a basic Node.js server, using online resources and templates. Response: We successfully built the back-end functionality and completed the hackathon project, earning a ‘Most Innovative’ award."
+    },
+    {
+      "question_id": 25,
+      "question_text": "When did you have to go above and beyond your scope to ensure project success?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our QA engineer was out sick, leaving testing for a major release undone. Action: I took on testing tasks, wrote additional test scripts, and verified critical paths. Response: By stepping in, we met our release date, and I gained a better appreciation for the QA process."
+    },
+    {
+      "question_id": 26,
+      "question_text": "Explain a scenario where your debugging skills saved a project from disaster.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Days before a product demo, the app consistently crashed on certain user actions. Action: I used log analysis and step-through debugging, pinpointing an unhandled edge case in the data parsing function. Response: Fixing this resolved the crashes, and the demo proceeded smoothly, reflecting well on our entire team."
+    },
+    {
+      "question_id": 27,
+      "question_text": "Give an example of how you collaborated with designers or product managers to finalize a feature.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our product manager wanted a visually appealing sign-up flow, while our designer proposed multiple UI options. Action: I organized a short meeting with both, shared feasibility concerns, and provided feedback from a technical standpoint. Response: We agreed on a simpler yet attractive design, delivered on time, and satisfied user needs."
+    },
+    {
+      "question_id": 28,
+      "question_text": "Describe a time you improved code efficiency or performance.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: A data-processing script in Python took hours to complete for large datasets. Action: I profiled the code, implemented multiprocessing, and replaced inefficient loops with vectorized operations. Response: The script now runs in minutes instead of hours, greatly improving our team’s productivity."
+    },
+    {
+      "question_id": 29,
+      "question_text": "Tell me about a time you had to balance adding new features with maintaining code quality.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Stakeholders pushed for continuous feature additions but had no structured testing in place. Action: I advocated for unit tests and code reviews, setting up a basic testing framework alongside new feature development. Response: This maintained code quality, avoided regression bugs, and ultimately saved time on debugging later."
+    },
+    {
+      "question_id": 30,
+      "question_text": "Describe how you handled a situation where you lacked complete requirements or specs.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My team started building a feature with only vague outlines from the product owner. Action: I organized a brief requirements-gathering meeting, asking targeted questions to clarify expectations. Response: We then documented the finalized requirements, which reduced confusion and expedited development."
+    },
+    {
+      "question_id": 31,
+      "question_text": "When was the last time you proactively volunteered for a challenging task in software development?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our backlog had a tricky ticket involving a low-level caching mechanism. Action: I volunteered, researched caching strategies, and wrote a proof of concept to validate the approach. Response: The final implementation improved response times by 20%, showcasing initiative and building my confidence in tackling complex tasks."
+    },
+    {
+      "question_id": 32,
+      "question_text": "Explain how you handle stressful deadlines or last-minute changes in software projects.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: A client requested last-minute UI adjustments days before launch. Action: I reassessed the existing tasks, communicated the impact of the changes, and prioritized accordingly. Response: By focusing on the highest-impact changes and keeping the client informed, we met the deadline without sacrificing stability."
+    },
+    {
+      "question_id": 33,
+      "question_text": "Talk about a time you needed to investigate a production issue under urgent circumstances.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Users started experiencing frequent timeouts in production. Action: I checked the server logs, identified a spike in requests to a specific endpoint, and deployed a hotfix. Response: The fix restored normal operation quickly, and I later implemented load balancing to prevent similar issues."
+    },
+    {
+      "question_id": 34,
+      "question_text": "Give an example of how you handle multiple stakeholder feedback in code reviews.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My PR received conflicting suggestions from two senior developers. Action: I booked a quick session with both, discussed the rationale behind each suggestion, and proposed a balanced solution. Response: By merging the best of both ideas, I improved the overall code quality and satisfied all parties involved."
+    },
+    {
+      "question_id": 35,
+      "question_text": "Describe when you had to work with a legacy codebase. How did you approach it?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I joined a project that involved maintaining a 5-year-old codebase with minimal documentation. Action: I spent time reading existing code, wrote unit tests for critical parts, and created updated documentation as I learned. Response: Gradually, the legacy code became more understandable and maintainable, allowing the team to introduce new features safely."
+    },
+    {
+      "question_id": 36,
+      "question_text": "Share a scenario when you had to clarify tasks or requirements that seemed ambiguous.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: A user story simply said ‘Improve user experience’ without detailed acceptance criteria. Action: I met with the product owner to discuss user flows, success metrics, and expected outcomes. Response: With clarified goals, I broke the story into actionable tasks, ensuring we addressed the user experience effectively."
+    },
+    {
+      "question_id": 37,
+      "question_text": "Describe a time you collaborated with a mentor or senior developer to solve a complex problem.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I got stuck with an intricate thread synchronization issue in a multi-threaded application. Action: I reached out to a senior developer, who walked me through concurrency best practices and code instrumentation. Response: We resolved the deadlock, and I gained valuable insights into writing thread-safe code."
+    },
+    {
+      "question_id": 38,
+      "question_text": "Talk about when you faced a steep learning curve in a new role. How did you manage it?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My first job assignment required working with Docker, Kubernetes, and microservices—none of which I had used. Action: I took a structured approach: reading docs, following tutorials, and shadowing a colleague already familiar with the tools. Response: Within a few weeks, I could confidently handle container deployments and contribute to the microservices architecture."
+    },
+    {
+      "question_id": 39,
+      "question_text": "Provide an example of when you handled or integrated with third-party APIs or libraries.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: We needed to add payment processing features using a popular payment API. Action: I read through the API documentation, set up a test environment, and implemented secure token handling. Response: The integration went smoothly, and our users benefited from a seamless checkout experience."
+    },
+    {
+      "question_id": 40,
+      "question_text": "Explain how you approached a complicated front-end or back-end bug fix.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our back-end microservice was returning partial data randomly, causing UI errors. Action: I cross-referenced server logs and front-end error messages, eventually finding a condition causing early termination in the API call. Response: After adjusting the condition and re-testing, the data returned consistently, resolving the user-facing errors."
+    },
+    {
+      "question_id": 41,
+      "question_text": "Tell me about a time you used version control (e.g., Git) to manage project collaboration effectively.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our group project had multiple developers often working on the same files. Action: I set up a branching workflow where each developer created feature branches, then merged via pull requests. Response: This process minimized conflicts, improved code reviews, and made the final integration smoother."
+    },
+    {
+      "question_id": 42,
+      "question_text": "Describe a situation where you tested software thoroughly to ensure minimal bugs at release.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: We were releasing a new reporting module that dealt with large amounts of data. Action: I created both unit and integration tests, tested edge cases with maximum data sizes, and also invited beta users to provide feedback. Response: The module launched with zero high-priority bugs, and users praised its reliability."
+    },
+    {
+      "question_id": 43,
+      "question_text": "When did you realize the importance of code documentation, and how did you address it?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I joined a project with very few comments or README files, making it difficult to onboard. Action: After struggling initially, I documented key functions, added docstrings, and wrote an onboarding guide. Response: Future newcomers found it much easier to contribute, and I saw firsthand how documentation saves time for the entire team."
+    },
+    {
+      "question_id": 44,
+      "question_text": "Give an example of how you handled a last-minute request to change an implementation detail.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Right before code freeze, a stakeholder requested switching the data format from XML to JSON. Action: I quickly estimated the workload, updated the parsing logic, and adjusted test cases. Response: Despite the short notice, I delivered the change on time and avoided disrupting the release schedule."
+    },
+    {
+      "question_id": 45,
+      "question_text": "Explain a time you had to pick up a project from someone else and quickly ramp up.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: A colleague left unexpectedly, and I had to continue their authentication feature. Action: I reviewed their commit history, read any existing documentation, and consulted team members for missing details. Response: Within a few days, I fully understood the feature and implemented the remaining functionalities without major issues."
+    },
+    {
+      "question_id": 46,
+      "question_text": "Describe a scenario where you needed to handle user feedback in your feature development.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our beta testers complained about slow load times on a new dashboard. Action: I analyzed their feedback, gathered performance metrics, and optimized queries as well as front-end rendering. Response: The improved load times met user expectations, and the positive feedback helped build trust in our development process."
+    },
+    {
+      "question_id": 47,
+      "question_text": "Talk about a time you contributed to open-source or a community project. What did you learn?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I fixed a small bug in an open-source JavaScript library that I frequently used in personal projects. Action: I created a pull request with detailed explanations, added tests, and followed the project’s contribution guidelines. Response: My fix got merged, and I learned how to collaborate effectively in a large, community-driven codebase."
+    },
+    {
+      "question_id": 48,
+      "question_text": "How did you respond when you faced difficulty in understanding a complex code review comment?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My reviewer suggested refactoring my code using a design pattern I wasn’t familiar with. Action: I researched the design pattern, revisited the review, and asked clarifying questions in the comment thread. Response: My final refactor followed best practices, and I gained new knowledge about that design pattern."
+    },
+    {
+      "question_id": 49,
+      "question_text": "Explain a time you optimized an algorithm or solved a performance bottleneck in your app.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: A sorting routine slowed the app significantly when dealing with large data sets. Action: I replaced the basic sorting function with a more efficient algorithm and added lazy loading for big data sets. Response: The change led to a noticeable performance boost, and our users reported faster response times."
+    },
+    {
+      "question_id": 50,
+      "question_text": "Describe how you managed a personal coding project or side project from start to finish.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I created a personal budgeting web app to track expenses. Action: I designed a simple back-end with a relational database, built a front-end interface, and iterated based on feedback from friends. Response: Completing the project sharpened my full-stack skills, and I learned the importance of user-friendly design."
+    }
+  ]
+  

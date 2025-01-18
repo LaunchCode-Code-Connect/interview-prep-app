@@ -1,0 +1,63 @@
+[
+    {
+      "question_id": 1,
+      "question_text": "Describe a time you had to resolve a conflict between two team members.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: During a group project, two colleagues disagreed on the approach to meet a tight deadline. Action: I facilitated a brief meeting where each explained their perspective, then we listed out pros and cons of each method. Response: By focusing on objective criteria—time, cost, and complexity—both team members agreed on a hybrid solution, and we completed the project smoothly."
+    },
+    {
+      "question_id": 2,
+      "question_text": "Tell me about a time you worked with someone whose personality was very different from yours.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I partnered with a teammate who was extremely detail-oriented, whereas I tend to focus on the broader vision. Action: I acknowledged our differences and set regular check-ins to balance big-picture goals with detailed checkpoints. Response: We combined our strengths, kept each other on track, and delivered a well-rounded final product."
+    },
+    {
+      "question_id": 3,
+      "question_text": "Give an example of how you handled a disagreement with a supervisor or manager.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: My manager and I disagreed about prioritizing a feature set versus fixing existing bugs. Action: I organized a quick meeting, presented data on how the bugs affected user satisfaction, and proposed a phased approach. Response: My manager appreciated the evidence-based reasoning, and we agreed to address the most critical bugs first, followed by the new features."
+    },
+    {
+      "question_id": 4,
+      "question_text": "Tell me about a time when a coworker criticized your work. How did you handle it?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: A colleague gave harsh feedback on my code’s structure during a review. Action: I asked clarifying questions to understand their concerns, then refactored my code following their suggestions and best practices. Response: The improved structure led to easier collaboration, and I built a stronger rapport with my coworker by showing openness to feedback."
+    },
+    {
+      "question_id": 5,
+      "question_text": "Describe a situation where you had to give difficult feedback to a teammate.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: One of my teammates regularly submitted incomplete work, affecting our project timeline. Action: I scheduled a private meeting, explained the impact on the project, and offered support or resources to help them. Response: They appreciated the direct but empathetic approach, improved their task management, and met subsequent deadlines reliably."
+    },
+    {
+      "question_id": 6,
+      "question_text": "Tell me about a conflict you faced in a project team and the steps you took to address it.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: Our team members blamed each other when tasks fell behind schedule. Action: I initiated a retrospective meeting where everyone could share issues without judgment, and we identified root causes like unclear responsibilities. Response: We assigned clear task ownership and implemented weekly progress checks, which reduced finger-pointing and improved team morale."
+    },
+    {
+      "question_id": 7,
+      "question_text": "Describe a time you had to convince a coworker or team to adopt your idea.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: I believed an automated testing framework would save time, but the rest of the team was hesitant. Action: I built a small proof of concept showing reduced manual testing hours, then shared the results during a team demo. Response: The tangible benefits convinced my coworkers, and we fully integrated automated tests into our workflow."
+    },
+    {
+      "question_id": 8,
+      "question_text": "How have you handled a situation where someone else took credit for your work?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: During a presentation, a colleague used my data analysis slides without mentioning my contribution. Action: I calmly approached them afterward, explained how it made me feel, and requested proper attribution in future meetings. Response: They apologized and acknowledged my role in follow-up discussions, and we maintained a positive working relationship by clarifying credit early on."
+    },
+    {
+      "question_id": 9,
+      "question_text": "Give an example of when you had to balance different viewpoints within a team to complete a project.",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: In a cross-functional team, designers, developers, and marketers had different goals for a product launch. Action: I facilitated a meeting to gather everyone’s priorities, identified overlapping objectives, and created a shared roadmap. Response: By focusing on common ground and setting mutual deadlines, the team successfully launched the product with all stakeholders satisfied."
+    },
+    {
+      "question_id": 10,
+      "question_text": "Tell me about a time you collaborated with a team under pressure. How did you maintain harmony and productivity?",
+      "type_of_question": "Behavioral",
+      "example_answer": "Situation: During a major product release crunch, the team was stressed by tight deadlines and last-minute changes. Action: I encouraged regular short stand-ups, offered to help teammates who were overwhelmed, and kept communication channels open. Response: We maintained a supportive atmosphere, stayed on schedule, and delivered a quality release despite the high-pressure environment."
+    }
+  ]
+  
