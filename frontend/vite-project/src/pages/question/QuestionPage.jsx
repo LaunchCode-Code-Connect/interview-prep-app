@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { ReactMediaRecorder } from "react-media-recorder";
 import WaveSurfer from "wavesurfer.js";
-// If you have React Router for reading URL params:
+// If you're using React Router for reading URL params:
 import { useParams } from "react-router-dom";
 
 function InterviewQuestion({ question_text }) {
-  question_text = "Example"
+  question_text = "Hello!";
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(null);
   const [showTimer, setShowTimer] = useState(false);
@@ -17,10 +17,10 @@ function InterviewQuestion({ question_text }) {
   const [action, setAction] = useState("");
   const [response, setResponse] = useState("");
 
-  // If using React Router to get question_id from the URL
-  const { id: question_id } = useParams(); // e.g., /question/123 => question_id = "123"
+  // Example: If using React Router to fetch question_id from the URL
+  const { id: question_id } = useParams(); // e.g. /question/123 => question_id= "123"
 
-  // Timer logic
+  /* ----- Timer Logic ----- */
   useEffect(() => {
     if (timeRemaining === null || timeRemaining < 0) return;
     const timer = setInterval(() => {
@@ -35,7 +35,7 @@ function InterviewQuestion({ question_text }) {
     return `${mm}:${ss < 10 ? "0" + ss : ss}`;
   };
 
-  // Web Speech API
+  /* ----- Speech Synthesis ----- */
   const handleSpeak = () => {
     if (!("speechSynthesis" in window)) {
       alert("Text-to-speech is not supported in this browser.");
@@ -47,39 +47,38 @@ function InterviewQuestion({ question_text }) {
     utterance.onend = () => {
       setIsSpeaking(false);
       setShowTimer(true);
-      setTimeRemaining(300); // 5 min
+      setTimeRemaining(300); // 5 minutes
     };
 
     window.speechSynthesis.speak(utterance);
   };
 
-  // When user is ready to answer (removes timer, shows recorder)
   const handleReadyToAnswer = () => {
     setShowTimer(false);
     setTimeRemaining(null);
     setShowAudioRecorder(true);
   };
 
-  // Handle "Save STAR Text" click
+  /* ----- Save STAR Text ----- */
   const handleSaveStarText = async () => {
-    // Format current date as MM/DD/YYYY
+    // Format date as MM/DD/YYYY
     const now = new Date();
     const month = String(now.getMonth() + 1).padStart(2, "0");
     const day = String(now.getDate()).padStart(2, "0");
     const year = now.getFullYear();
     const dateUpdated = `${month}/${day}/${year}`;
 
-    // Prepare payload
     const payload = {
       situation_text: situation,
       task_text: task,
       action_text: action,
       response_text: response,
-      question_id: question_id || "", // in case there's no param
+      question_id: question_id || "",
       date_updated: dateUpdated,
     };
 
     try {
+      // Example POST to your backend route:
       const res = await fetch("/api/save-star", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -97,103 +96,95 @@ function InterviewQuestion({ question_text }) {
   };
 
   return (
-    <div style={{ maxWidth: "600px", margin: "0 auto" }}>
-      <h3>{question_text}</h3>
+    <div className="container my-4">
+      <h3 className="mb-3">{question_text}</h3>
 
-      {/* Textareas for Situation, Task, Action, Response */}
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-        <div style={{ flex: 1 }}>
-          <label
-            htmlFor="situation"
-            style={{ display: "block", marginBottom: "5px" }}
-          >
+      {/* Text areas with two columns per row */}
+      <div className="row g-3 mb-3">
+        <div className="col-md-6">
+          <label htmlFor="situation" className="form-label">
             Situation
           </label>
           <textarea
             id="situation"
+            className="form-control"
             rows="4"
-            style={{ width: "100%" }}
             value={situation}
             onChange={(e) => setSituation(e.target.value)}
           />
         </div>
-        <div style={{ flex: 1 }}>
-          <label
-            htmlFor="task"
-            style={{ display: "block", marginBottom: "5px" }}
-          >
+        <div className="col-md-6">
+          <label htmlFor="task" className="form-label">
             Task
           </label>
           <textarea
             id="task"
+            className="form-control"
             rows="4"
-            style={{ width: "100%" }}
             value={task}
             onChange={(e) => setTask(e.target.value)}
           />
         </div>
       </div>
 
-      <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-        <div style={{ flex: 1 }}>
-          <label
-            htmlFor="action"
-            style={{ display: "block", marginBottom: "5px" }}
-          >
+      <div className="row g-3 mb-3">
+        <div className="col-md-6">
+          <label htmlFor="action" className="form-label">
             Action
           </label>
           <textarea
             id="action"
+            className="form-control"
             rows="4"
-            style={{ width: "100%" }}
             value={action}
             onChange={(e) => setAction(e.target.value)}
           />
         </div>
-        <div style={{ flex: 1 }}>
-          <label
-            htmlFor="response"
-            style={{ display: "block", marginBottom: "5px" }}
-          >
+        <div className="col-md-6">
+          <label htmlFor="response" className="form-label">
             Response
           </label>
           <textarea
             id="response"
+            className="form-control"
             rows="4"
-            style={{ width: "100%" }}
             value={response}
             onChange={(e) => setResponse(e.target.value)}
           />
         </div>
       </div>
 
-      {/* Third row with Save STAR Text button */}
-      <div style={{ marginBottom: "20px" }}>
-        <button onClick={handleSaveStarText}>Save STAR Text</button>
+      {/* Save STAR Text Button */}
+      <div className="mb-3">
+        <button className="btn btn-info" onClick={handleSaveStarText}>
+          Save STAR Text
+        </button>
       </div>
 
-      {/* Button to speak question */}
-      <button onClick={handleSpeak} disabled={isSpeaking}>
-        {isSpeaking ? "Speaking..." : "Read Question Aloud"}
-      </button>
+      {/* Speak Question Button */}
+      <div className="mb-3">
+        <button
+          className="btn btn-primary me-2"
+          onClick={handleSpeak}
+          disabled={isSpeaking}
+        >
+          {isSpeaking ? "Speaking..." : "Read Question Aloud"}
+        </button>
+      </div>
 
       {/* Countdown + Ready to Answer */}
       {showTimer && timeRemaining !== null && timeRemaining >= 0 && (
-        <div style={{ marginTop: "20px", display: "flex", alignItems: "center" }}>
-          <div
-            style={{
-              fontSize: "1.5rem",
-              fontWeight: "bold",
-              marginRight: "20px",
-            }}
-          >
+        <div className="d-flex align-items-center mb-3">
+          <h5 className="me-3 mb-0">
             Time Remaining: {formatTime(timeRemaining)}
-          </div>
-          <button onClick={handleReadyToAnswer}>Ready to Answer Question</button>
+          </h5>
+          <button className="btn btn-success" onClick={handleReadyToAnswer}>
+            Ready to Answer Question
+          </button>
         </div>
       )}
 
-      {/* Audio Recorder */}
+      {/* Audio Recorder (once user clicks Ready to Answer) */}
       {showAudioRecorder && <AudioRecorder />}
     </div>
   );
@@ -201,9 +192,9 @@ function InterviewQuestion({ question_text }) {
 
 export default InterviewQuestion;
 
-/* -------------------------------------------- */
-/*           Audio Recorder Component          */
-/* -------------------------------------------- */
+/* -------------------------------------------------------- */
+/*     Audio Recorder Component with Bootstrap Styling      */
+/* -------------------------------------------------------- */
 
 function AudioRecorder() {
   const waveSurferRef = useRef(null);
@@ -215,65 +206,88 @@ function AudioRecorder() {
       waveSurferRef.current = WaveSurfer.create({
         container: "#waveform",
         waveColor: "#ccc",
-        progressColor: "#333",
+        progressColor: "#0d6efd", // Use a bootstrap-like color for the progress
         cursorColor: "#999",
         barWidth: 2,
         barRadius: 2,
         responsive: true,
-        height: 80
+        height: 80,
       });
       setWaveSurfer(waveSurferRef.current);
     }
   }, []);
 
   return (
-    <div style={{ marginTop: "20px" }}>
-      <ReactMediaRecorder
-        audio
-        render={({
-          status,
-          startRecording,
-          stopRecording,
-          pauseRecording,
-          resumeRecording,
-          mediaBlobUrl
-        }) => {
-          // Whenever the blob url updates, load it into WaveSurfer for playback
-          useEffect(() => {
-            if (waveSurfer && mediaBlobUrl) {
-              waveSurfer.load(mediaBlobUrl);
-            }
-          }, [mediaBlobUrl, waveSurfer]);
+    <div className="card">
+      <div className="card-body">
+        <ReactMediaRecorder
+          audio
+          render={({
+            status,
+            startRecording,
+            stopRecording,
+            pauseRecording,
+            resumeRecording,
+            mediaBlobUrl,
+          }) => {
+            // Whenever the blob url updates, load it into WaveSurfer
+            useEffect(() => {
+              if (waveSurfer && mediaBlobUrl) {
+                waveSurfer.load(mediaBlobUrl);
+              }
+            }, [mediaBlobUrl, waveSurfer]);
 
-          // For "playback" via WaveSurfer
-          const handlePlayback = () => {
-            if (waveSurfer) {
-              waveSurfer.playPause(); // If paused, play. If playing, pause.
-            }
-          };
+            const handlePlayback = () => {
+              if (waveSurfer) {
+                waveSurfer.playPause(); // toggles play/pause
+              }
+            };
 
-          return (
-            <div>
-              <h4>Recording Status: {status}</h4>
-              <div style={{ display: "flex", gap: "10px", marginBottom: "10px" }}>
-                <button onClick={startRecording}>Record</button>
-                <button onClick={pauseRecording}>Pause</button>
-                <button onClick={resumeRecording}>Resume</button>
-                <button onClick={stopRecording}>Stop</button>
-                <button onClick={handlePlayback}>Playback</button>
+            return (
+              <div>
+                <h5 className="card-title">Recording Status: {status}</h5>
+                <div className="mb-3">
+                  <button
+                    className="btn btn-danger me-2"
+                    onClick={startRecording}
+                  >
+                    Record
+                  </button>
+                  <button
+                    className="btn btn-warning me-2"
+                    onClick={pauseRecording}
+                  >
+                    Pause
+                  </button>
+                  <button
+                    className="btn btn-secondary me-2"
+                    onClick={resumeRecording}
+                  >
+                    Resume
+                  </button>
+                  <button className="btn btn-dark me-2" onClick={stopRecording}>
+                    Stop
+                  </button>
+                  <button
+                    className="btn btn-outline-primary"
+                    onClick={handlePlayback}
+                  >
+                    Playback
+                  </button>
+                </div>
+
+                {/* Waveform container */}
+                <div id="waveform" className="mb-3" />
+
+                {/* Optional native audio element for convenience */}
+                {mediaBlobUrl && (
+                  <audio src={mediaBlobUrl} controls className="w-100 mt-2" />
+                )}
               </div>
-
-              {/* Waveform container */}
-              <div id="waveform" style={{ marginTop: "20px" }} />
-
-              {/* Optionally display audio below, if you want a native control */}
-              {mediaBlobUrl && (
-                <audio src={mediaBlobUrl} controls style={{ marginTop: "10px" }} />
-              )}
-            </div>
-          );
-        }}
-      />
+            );
+          }}
+        />
+      </div>
     </div>
   );
 }
