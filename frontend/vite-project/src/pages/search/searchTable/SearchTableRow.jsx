@@ -19,8 +19,9 @@ function SearchResultTableRows({ data }) {
         onClick={() => handleRowClick(question_id)}
       >
         <td>{question_id}</td>
+        <td>{record[dataFields["question_type"]]}</td>
+        <td>{record[dataFields["question_area"]]}</td>
         <td>{record[dataFields["question_text"]]}</td>
-        <td>{record[dataFields["type_of_question"]]}</td>
         <td>{record[dataFields["example_answer"]]}</td>
       </tr>
     );

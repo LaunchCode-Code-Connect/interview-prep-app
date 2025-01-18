@@ -1,6 +1,7 @@
 const dataFields = {
   question_id: "question_id",
-  type_of_question: "type_of_question",
+  question_type: "question_type",
+  question_area: "question_area",
   question_text: "question_text",
   example_answer: "example_answer",
 };

@@ -2,6 +2,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
+const question_records = require("./question-bank/questions")
 
 // Adjust this path to match your directory structure
 const ANSWERS_FILE_PATH = path.join(
@@ -18,7 +19,6 @@ const QUESTIONS_FILE_PATH = path.join(
 const router = express.Router();
 
 const rawData = fs.readFileSync(QUESTIONS_FILE_PATH, "utf8");
-const question_records = JSON.parse(rawData);
 
 router.get("/search", (req, res) => {
   try {
