@@ -1,68 +1,60 @@
+// server.js or similar Express server file
 const express = require("express");
-const _ = require("lodash");
-const router = express.Router();
-const json = require("./files/user-behavior-data.json");
+const fs = require("fs");
+const path = require("path");
 
-router.get("/data/search", (req, res, next) => {
-  /*
-    Valid Query String Parameters
-    - operatingSystem
-    - deviceModel
-    - gender
-    - behaviorClass
-  */
+// Adjust this path to match your directory structure
+const ANSWERS_FILE_PATH = path.join(__dirname, "user-data", "user-answers.json");
 
-  const filterType = req.query.filterType || null;
-  const keyword = req.query.keyword || null;
+const router = express.Router()
 
-  let searchType;
-  if (filterType) {
-    const lower_case = filterType.toLowerCase();
-    searchType =
-      lower_case === "model"
-        ? "m"
-        : lower_case === "gender"
-        ? "g"
-        : lower_case === "operatingsystem"
-        ? "op"
-        : lower_case === "behaviorclass"
-        ? "bc"
-        : "unfiltered";
-  }
+// Example route to save data
+router.post("/save-star", (req, res) => {
+  try {
+    // 1) Read existing JSON
+    let rawData = fs.readFileSync(ANSWERS_FILE_PATH, "utf8");
+    let answers = JSON.parse(rawData); // Should be an array
 
-  if (
-    searchType === "unfiltered" ||
-    (searchType !== "unfiltered" && !keyword)
-  ) {
-    return res.send(json);
-  } else {
-    const filteredData = _.filter(json, (record) => {
-      let include = false;
-      let lower_keyword = keyword.toLowerCase();
-      switch (searchType) {
-        case "m":
-          include =
-            record["Device Model"].toLowerCase().indexOf(lower_keyword) >= 0;
-          break;
-        case "g":
-          include = record["Gender"].toLowerCase() === lower_keyword;
-          break;
-        case "op":
-          include =
-            record["Operating System"].toLowerCase().indexOf(lower_keyword) >=
-            0;
-          break;
-        case "bc":
-          include = record["User Behavior Class"] === lower_keyword;
-          break;
-        default:
-          return false;
-      }
+    // 2) The new or updated object
+    const {
+      situation_text,
+      task_text,
+      action_text,
+      response_text,
+      question_id,
+      date_updated
+    } = req.body;
 
-      return include;
-    });
-    return res.send(filteredData);
+    // 3) Find if it already exists
+    const existingIndex = answers.findIndex(
+      (item) => item.question_id === question_id
+    );
+
+    // 4) If exists, replace; if not, push
+    const newData = {
+      situation_text,
+      task_text,
+      action_text,
+      response_text,
+      question_id,
+      date_updated
+    };
+
+    if (existingIndex !== -1) {
+      answers[existingIndex] = newData;
+    } else {
+      answers.push(newData);
+    }
+
+    // 5) Write back to file
+    fs.writeFileSync(ANSWERS_FILE_PATH, JSON.stringify(answers, null, 2), "utf8");
+
+    res.json({ success: true });
+  } catch (error) {
+    console.error("Error writing to user-answers.json:", error);
+    res.status(500).json({ error: "Could not save data" });
   }
 });
 
-module.exports = router;
+
+module.exports = router
