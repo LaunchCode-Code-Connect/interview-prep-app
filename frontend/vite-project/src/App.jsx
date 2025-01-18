@@ -5,6 +5,7 @@ import AboutPage from "./pages/about/AboutPage";
 import NotFound from "./pages/404/NotFound";
 import { getSearchResults } from "./api/search";
 import InterviewQuestion from "./pages/question/QuestionPage";
+import "./App.css"
 
 function App() {
   const [loading, setLoading] = useState(false);

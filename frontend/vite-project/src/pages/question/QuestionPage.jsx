@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { ReactMediaRecorder } from "react-media-recorder";
-import "./q-page.css"
 
+/**
+ * Main InterviewQuestion component
+ */
 function InterviewQuestion() {
-  // ---------- state variables ----------
+  // ---------- state ----------
   const [questionText, setQuestionText] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(null);
@@ -17,20 +19,19 @@ function InterviewQuestion() {
   const [action, setAction] = useState("");
   const [response, setResponse] = useState("");
 
-  // Example: get "id" from URL
+  // Grab "id" from URL
   const { id: question_id } = useParams();
 
   // ---------- fetch question on mount ----------
   useEffect(() => {
     const getQuestion = async (qId) => {
       try {
-        // for example, /api/questions/:id
+        // Example: /api/questions/:id
         const res = await fetch(`/api/questions/${qId}`);
-        if (!res.ok) {
-          throw new Error("Failed to load question data");
-        }
+        if (!res.ok) throw new Error("Failed to load question data");
         const data = await res.json();
-        setQuestionText(data.question_text || "");
+        let q_text = data.length > 0 ? data[0].question_text : "";
+        setQuestionText(q_text);
       } catch (error) {
         console.error("Error fetching question:", error);
       }
@@ -55,7 +56,7 @@ function InterviewQuestion() {
     return `${mm}:${ss < 10 ? "0" + ss : ss}`;
   };
 
-  // ---------- Speech Synthesis (Read Question) ----------
+  // ---------- Speech Synthesis ----------
   const handleSpeak = () => {
     if (!("speechSynthesis" in window)) {
       alert("Text-to-speech is not supported in this browser.");
@@ -73,7 +74,7 @@ function InterviewQuestion() {
     window.speechSynthesis.speak(utterance);
   };
 
-  // ---------- "Ready to Answer" (show recorder) ----------
+  // ---------- "Ready to Answer" ----------
   const handleReadyToAnswer = () => {
     setShowTimer(false);
     setTimeRemaining(null);
@@ -104,13 +105,13 @@ function InterviewQuestion() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
       });
-      if (res.ok) {
-        alert("STAR text saved successfully!");
-      } else {
+      if (!res.ok) {
         alert("Error saving STAR text. Check server logs.");
+      } else {
+        alert("STAR text saved successfully!");
       }
-    } catch (error) {
-      console.error("Error saving STAR text:", error);
+    } catch (err) {
+      console.error("Error saving STAR text:", err);
       alert("Unable to save. Ensure the server is running.");
     }
   };
@@ -197,29 +198,18 @@ function InterviewQuestion() {
         </div>
       )}
 
-      {showRecorder && <AudioVideoRecorder />}
+      {showRecorder && <AudioVideoRecorder questionId={question_id} />}
     </div>
   );
 }
 
 export default InterviewQuestion;
 
-/* ----------------------------------- */
-/*   AudioVideoRecorder (No Waveform)  */
-/* ----------------------------------- */
+/* ------------------------------------------ */
+/*   AudioVideoRecorder w/ MP4 mimeType       */
+/* ------------------------------------------ */
 
-function AudioVideoRecorder() {
-  /*
-    We manage local button states to achieve:
-    - "Pause", "Resume", "Stop" hidden by default
-    - Once "Record" is clicked: 
-       -> "Record" text -> "Recording..." (blinks), button disabled
-       -> show Pause, Stop
-    - "Pause" -> hides Pause, shows Resume, record text -> "Paused"
-    - "Resume" -> hides Resume, shows Pause, record text -> "Recording..."
-    - "Stop" -> hide Pause & Resume, hide Stop, record text -> "Record", re-enable record
-  */
-
+function AudioVideoRecorder({ questionId }) {
   const [recordButtonText, setRecordButtonText] = useState("Record");
   const [isRecordDisabled, setIsRecordDisabled] = useState(false);
 
@@ -227,21 +217,53 @@ function AudioVideoRecorder() {
   const [showResume, setShowResume] = useState(false);
   const [showStop, setShowStop] = useState(false);
 
-  // For controlling the "blinking" class when recording
+  const [mediaBlobUrl, setMediaBlobUrl] = useState(null);
+  const [showDownload, setShowDownload] = useState(false);
+
+  // isBlinking = apply .blink class if "Recording..."
   const isBlinking = recordButtonText === "Recording...";
 
-  // Playback just toggles <video> or user can use the <video> controls
-  const [mediaBlobUrl, setMediaBlobUrl] = useState(null);
+  // Download Handler
+  const handleDownloadVideo = () => {
+    if (!mediaBlobUrl) return;
+    fetch(mediaBlobUrl)
+      .then((res) => res.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+
+        // Format current date/time as requested
+        const now = new Date();
+        const mm = String(now.getMonth() + 1).padStart(2, "0");
+        const dd = String(now.getDate()).padStart(2, "0");
+        const yyyy = now.getFullYear();
+        const hh = String(now.getHours()).padStart(2, "0");
+        const min = String(now.getMinutes()).padStart(2, "0");
+        const ss = String(now.getSeconds()).padStart(2, "0");
+        const dateTime = `${mm}-${dd}-${yyyy}_${hh}:${min}:${ss}`;
+
+        // e.g. LaunchCode-Question-123-response-07-12-2023_14:35:10.mp4
+        const filename = `LaunchCode-Question-${questionId}-response-${dateTime}.mp4`;
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+
+        window.URL.revokeObjectURL(url);
+      });
+  };
 
   return (
     <div className="card">
       <div className="card-body">
         <h5 className="card-title mb-3">Video Recording (Audio + Video)</h5>
 
-        {/* The ReactMediaRecorder handles the actual recording logic */}
         <ReactMediaRecorder
-          video
           audio
+          video
+          mimeType="video/mp4"
           render={({
             status,
             startRecording,
@@ -250,72 +272,56 @@ function AudioVideoRecorder() {
             resumeRecording,
             mediaBlobUrl: newBlobUrl,
           }) => {
-            // If the ReactMediaRecorder has a new blobUrl, store it in our local state
             useEffect(() => {
               if (newBlobUrl) {
                 setMediaBlobUrl(newBlobUrl);
               }
             }, [newBlobUrl]);
 
-            // Handlers for each button, updating local states to show/hide buttons
+            /* Button Actions */
             const onRecordClick = () => {
-              // Start recording
               startRecording();
-              // Change button text to "Recording..."
               setRecordButtonText("Recording...");
-              // Start blinking, disable further clicks
               setIsRecordDisabled(true);
-              // Show Pause, Stop, hide Resume
               setShowPause(true);
               setShowStop(true);
               setShowResume(false);
+              setShowDownload(false);
             };
 
             const onPauseClick = () => {
-              // Pause recording
               pauseRecording();
-              // Hide Pause, show Resume
               setShowPause(false);
               setShowResume(true);
-              // Record button text -> "Paused"
               setRecordButtonText("Paused");
             };
 
             const onResumeClick = () => {
-              // Resume recording
               resumeRecording();
-              // Hide Resume, show Pause
               setShowResume(false);
               setShowPause(true);
-              // Record button text -> "Recording..."
               setRecordButtonText("Recording...");
             };
 
             const onStopClick = () => {
-              // Stop recording
               stopRecording();
-              // Hide Pause, Resume, Stop
               setShowPause(false);
               setShowResume(false);
               setShowStop(false);
-              // Reset record button text -> "Record"
               setRecordButtonText("Record");
-              // Re-enable record button
               setIsRecordDisabled(false);
+              setShowDownload(true);
             };
 
             return (
-              <div>
-                {/* status can be displayed if you want */}
+              <>
                 <p>
                   <strong>Recorder Status:</strong> {status}
                 </p>
 
                 {/* RECORD BUTTON */}
                 <button
-                  className={`btn btn-danger me-2 ${
-                    isBlinking ? "blink" : ""
-                  }`}
+                  className={`btn btn-danger me-2 ${isBlinking ? "blink" : ""}`}
                   onClick={onRecordClick}
                   disabled={isRecordDisabled}
                 >
@@ -324,14 +330,20 @@ function AudioVideoRecorder() {
 
                 {/* PAUSE BUTTON */}
                 {showPause && (
-                  <button className="btn btn-warning me-2" onClick={onPauseClick}>
+                  <button
+                    className="btn btn-warning me-2"
+                    onClick={onPauseClick}
+                  >
                     Pause
                   </button>
                 )}
 
                 {/* RESUME BUTTON */}
                 {showResume && (
-                  <button className="btn btn-secondary me-2" onClick={onResumeClick}>
+                  <button
+                    className="btn btn-secondary me-2"
+                    onClick={onResumeClick}
+                  >
                     Resume
                   </button>
                 )}
@@ -343,7 +355,7 @@ function AudioVideoRecorder() {
                   </button>
                 )}
 
-                {/* PLAYBACK (video) */}
+                {/* VIDEO Playback */}
                 {mediaBlobUrl && (
                   <div className="mt-3">
                     <h6>Playback:</h6>
@@ -355,7 +367,17 @@ function AudioVideoRecorder() {
                     />
                   </div>
                 )}
-              </div>
+
+                {/* DOWNLOAD BUTTON */}
+                {showDownload && (
+                  <button
+                    className="btn btn-success mt-3"
+                    onClick={handleDownloadVideo}
+                  >
+                    Download Video
+                  </button>
+                )}
+              </>
             );
           }}
         />
