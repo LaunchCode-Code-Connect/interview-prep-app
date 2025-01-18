@@ -4,6 +4,7 @@ import SearchPage from "./pages/search/SearchPage";
 import AboutPage from "./pages/about/AboutPage";
 import NotFound from "./pages/404/NotFound";
 import { getSearchResults } from "./api/search";
+import InterviewQuestion from "./pages/question/QuestionPage";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -66,6 +67,7 @@ function App() {
             />
           }
         />
+        <Route path="/question/:id" element={<InterviewQuestion/>}/>
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

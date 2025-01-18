@@ -1,7 +1,6 @@
 import React from "react";
 import SearchResultsTable from "./searchTable/SearchTable";
 import SearchBar from "./SearchBar";
-import MetricsBar from "./metrics/MetricsBar";
 
 function SearchPage({ data, handleSearch, errorMsg, loading }) {
   return (
@@ -20,9 +19,6 @@ function SearchPage({ data, handleSearch, errorMsg, loading }) {
         ) : (
           <p>No Records To Display</p>
         )}
-      </div>
-      <div className="row align-items-center">
-        <MetricsBar data={data} />
       </div>
       <div className="row align-items-center">
         {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}

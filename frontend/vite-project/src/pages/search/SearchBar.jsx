@@ -3,10 +3,12 @@ import Select from "../../components/Select";
 
 export default function SearchBar({ onSearch }) {
   const filterTypeOptions = [
-    "model",
-    "gender",
-    "operatingSystem",
-    "behaviorClass",
+    "All",
+    "Software Dev",
+    "Data/Business Intelligence Analyst",
+    "LaunchCode Specific",
+    "General",
+
   ];
   const [keyword, setKeyword] = useState("");
   const [filterType, setFilterType] = useState(filterTypeOptions[0]);
@@ -21,7 +23,7 @@ export default function SearchBar({ onSearch }) {
       >
         <div className="input-group">
           <Select
-            label={"Select data point to filter search by"}
+            label={"Select questions area"}
             options={filterTypeOptions}
             handleChange={(e) => {
               setFilterType(e.target.value);
