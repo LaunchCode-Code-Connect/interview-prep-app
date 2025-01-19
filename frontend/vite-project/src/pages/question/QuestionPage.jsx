@@ -40,6 +40,22 @@ function InterviewQuestion() {
       }
     };
 
+    const getNotes = async(qId) => {
+      try {
+        // 1) Fetch question data from /api/questions/:id
+        const res = await fetch(`/api/questions/${qId}/notes`);
+        if (!res.ok) throw new Error("Failed to load notes data");
+        const data = await res.json();
+        const {action_text, response_text, situation_text, task_text} = data
+        setSituation(situation_text);
+        setAction(action_text);
+        setTask(task_text);
+        setResponse(response_text);
+      } catch (error) {
+        console.error("Error fetching notes:", error);
+      }
+    }
+
     const checkFavorite = async (qId) => {
       try {
         // 2) Check if this question is currently favorited
@@ -56,6 +72,7 @@ function InterviewQuestion() {
     if (question_id) {
       getQuestion(question_id);
       checkFavorite(question_id);
+      getNotes(question_id)
     }
   }, [question_id]);
 

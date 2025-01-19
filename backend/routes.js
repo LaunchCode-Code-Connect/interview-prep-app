@@ -128,10 +128,11 @@ router.get("/questions/:id", (req, res) => {
 
 router.get("/questions/:id/notes", (req, res) => {
   try {
-    const question_id = parseInt(req.params.id, 10);
     const data = fs.readFileSync(ANSWERS_FILE_PATH, "utf8");
     const answers = JSON.parse(data); // e.g. [1, 2, 5, ...]
-    const answer_record = answers.filter(o => o["question_id"] === question_id)
+    console.log(answers)
+    const answer_record = answers.filter(o => o["question_id"] === req.params.id)
+    console.log(answer_record)
     if (answer_record.length > 0) {
       return res.send(answer_record[0]);
     } else {
