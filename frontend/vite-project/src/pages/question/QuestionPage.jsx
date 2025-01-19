@@ -6,7 +6,7 @@ import { ReactMediaRecorder } from "react-media-recorder";
  * Main InterviewQuestion component
  */
 function InterviewQuestion() {
-  // ---------- state ----------
+  /* ---------- State Variables ---------- */
   const [questionText, setQuestionText] = useState("");
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(null);
@@ -19,29 +19,46 @@ function InterviewQuestion() {
   const [action, setAction] = useState("");
   const [response, setResponse] = useState("");
 
-  // Grab "id" from URL
+  // Favorite state
+  const [isFavorited, setIsFavorited] = useState(false);
+
+  // param from URL
   const { id: question_id } = useParams();
 
-  // ---------- fetch question on mount ----------
+  // ---------- On mount, load question + check if favorited ----------
   useEffect(() => {
     const getQuestion = async (qId) => {
       try {
-        // Example: /api/questions/:id
-        const res = await fetch(`/api/questions/${qId}`);
-        if (!res.ok) throw new Error("Failed to load question data");
-        const data = await res.json();
-        let q_text = data.length > 0 ? data[0].question_text : "";
-        setQuestionText(q_text);
+        // 1) Fetch question data from /api/questions/:id
+        const questionRes = await fetch(`/api/questions/${qId}`);
+        if (!questionRes.ok) throw new Error("Failed to load question data");
+        const questionData = await questionRes.json();
+        setQuestionText(questionData.question_text || "");
       } catch (error) {
         console.error("Error fetching question:", error);
       }
     };
+
+    const checkFavorite = async (qId) => {
+      try {
+        // 2) Check if this question is currently favorited
+        // For example, a GET route that returns { isFavorited: true/false }
+        const favRes = await fetch(`/api/questions/${qId}/favorite`);
+        if (!favRes.ok) throw new Error("Failed to check favorite status");
+        const favData = await favRes.json();
+        setIsFavorited(favData.isFavorited || false);
+      } catch (error) {
+        console.error("Error fetching favorite status:", error);
+      }
+    };
+
     if (question_id) {
       getQuestion(question_id);
+      checkFavorite(question_id);
     }
   }, [question_id]);
 
-  // ---------- Timer logic ----------
+  /* ---------- Timer logic ---------- */
   useEffect(() => {
     if (timeRemaining === null || timeRemaining < 0) return;
     const timer = setInterval(() => {
@@ -56,7 +73,7 @@ function InterviewQuestion() {
     return `${mm}:${ss < 10 ? "0" + ss : ss}`;
   };
 
-  // ---------- Speech Synthesis ----------
+  /* ---------- Speech Synthesis ---------- */
   const handleSpeak = () => {
     if (!("speechSynthesis" in window)) {
       alert("Text-to-speech is not supported in this browser.");
@@ -74,14 +91,14 @@ function InterviewQuestion() {
     window.speechSynthesis.speak(utterance);
   };
 
-  // ---------- "Ready to Answer" ----------
+  /* ---------- "Ready to Answer" ---------- */
   const handleReadyToAnswer = () => {
     setShowTimer(false);
     setTimeRemaining(null);
     setShowRecorder(true);
   };
 
-  // ---------- Save STAR Text ----------
+  /* ---------- Save STAR Text ---------- */
   const handleSaveStarText = async () => {
     // Format date as MM/DD/YYYY
     const now = new Date();
@@ -116,9 +133,55 @@ function InterviewQuestion() {
     }
   };
 
+  /* ---------- Toggle Favorite ---------- */
+  const handleToggleFavorite = async () => {
+    if (!question_id) return;
+
+    const newFavoriteState = !isFavorited;
+    // Update local UI state immediately
+    setIsFavorited(newFavoriteState);
+
+    try {
+      // POST to /api/questions/:id/favorite
+      // We'll pass { favorite: true/false } to let the backend decide to add or remove from user-favorites.json
+      const res = await fetch(`/api/questions/${question_id}/favorite`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ favorite: newFavoriteState }),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to update favorite status on server");
+      }
+    } catch (error) {
+      console.error("Error toggling favorite status:", error);
+      // Revert local state if the server call fails
+      setIsFavorited(!newFavoriteState);
+      alert("Unable to update favorite status. Please try again.");
+    }
+  };
+
   return (
     <div className="container my-4">
-      <h3 className="mb-3">{questionText}</h3>
+      {/* Star icon row */}
+      <div className="d-flex justify-content-start mb-2">
+        {/* If not favorited => hollow star, if favored => filled star */}
+        <button
+          className={`btn btn-info`}
+          onClick={handleToggleFavorite}
+          title={
+            isFavorited ? "Click to remove from favorites" : "Click to favorite"
+          }
+        >
+          {isFavorited ? "Click to remove from favorites " : "Click to favorite "}
+          <i
+            className={`bi ${isFavorited ? "bi-star-fill" : "bi-star"} fs-4`}
+            style={{ cursor: "pointer" }}
+            onClick={handleToggleFavorite}
+          ></i>
+        </button>
+      </div>
+
+      <h3 className="mb-3">{"Perfect"}</h3>
 
       <div className="row g-3 mb-3">
         <div className="col-md-6">

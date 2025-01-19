@@ -10,11 +10,21 @@ const ANSWERS_FILE_PATH = path.join(
   "user-data",
   "user-answers.json"
 );
+
+const FAVORITES_FILE = path.join(__dirname, "user-data", "user-favorites.json");
+
 const QUESTIONS_FILE_PATH = path.join(
   __dirname,
   "question-bank",
   "entry-level-software-dev.json"
 );
+
+if (!fs.existsSync(FAVORITES_FILE)) {
+  fs.writeFileSync(FAVORITES_FILE, "[]", "utf8");
+}
+if (!fs.existsSync(ANSWERS_FILE_PATH)) {
+  fs.writeFileSync(FAVORITES_FILE, "[]", "utf8");
+}
 
 const router = express.Router();
 
@@ -103,13 +113,9 @@ router.post("/save-star", (req, res) => {
 router.get("/questions/:id", (req, res) => {
   try {
     const id = Number(req.params.id);
-    console.log("getting id")
-    console.log(id)
     const question_record = question_records.filter(
       (o) =>  o["question_id"] === id
     );
-
-    console.log(question_record)
 
     if (question_record.length > 0) {
       return res.send(question_record);
@@ -119,6 +125,45 @@ router.get("/questions/:id", (req, res) => {
   } catch (error) {
     console.error("Error reading JSON file:", error);
     res.status(500).json({ error: "Could not retrieve records." });
+  }
+});
+
+router.get("/questions/:id/favorite", (req, res) => {
+  try {
+    const question_id = parseInt(req.params.id, 10);
+    const data = fs.readFileSync(FAVORITES_FILE, "utf8");
+    const favorites = JSON.parse(data); // e.g. [1, 2, 5, ...]
+    console.log(favorites)
+    const isFavorited = favorites.includes(question_id);
+    res.json({ isFavorited });
+  } catch (err) {
+    console.error("Error reading favorites:", err);
+    res.status(500).json({ error: "Could not read favorites" });
+  }
+});
+
+router.post("/questions/:id/favorite", (req, res) => {
+  try {
+    const question_id = parseInt(req.params.id, 10);
+    const { favorite } = req.body; // true => add, false => remove
+    let data = fs.readFileSync(FAVORITES_FILE, "utf8");
+    let favorites = JSON.parse(data);
+
+    if (favorite) {
+      // Add if not already present
+      if (!favorites.includes(question_id)) {
+        favorites.push(question_id);
+      }
+    } else {
+      // Remove if present
+      favorites = favorites.filter((id) => id !== question_id);
+    }
+
+    fs.writeFileSync(FAVORITES_FILE, JSON.stringify(favorites, null, 2), "utf8");
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error updating favorites:", err);
+    res.status(500).json({ error: "Could not update favorites" });
   }
 });
 
