@@ -26,6 +26,42 @@ if (!fs.existsSync(ANSWERS_FILE_PATH)) {
   fs.writeFileSync(FAVORITES_FILE, "[]", "utf8");
 }
 
+// 1) Build a map of the second file (rightData) keyed by question_id
+
+const joinedData = new Map();
+const f_data = fs.readFileSync(FAVORITES_FILE, "utf8");
+const a_data = fs.readFileSync(ANSWERS_FILE_PATH, "utf8");
+
+const favorites = JSON.parse(f_data);
+const answers = JSON.parse(a_data)
+
+for (let q of question_records){
+  joinedData.set(q["question_id"], q)
+}
+
+for (let id of favorites){
+  const q_record = {...joinedData.get(id)}
+  if (q_record){
+    q_record["isFavorited"] = true
+    joinedData.set(id, q_record)
+  } 
+}
+
+
+for (let a of answers){
+  const id = Number(a["question_id"])
+  const q_record = {...joinedData.get(id)}
+  console.log(q_record)
+  if (q_record){
+    q_record["user_notes"] = a
+    console.log(q_record)
+    joinedData.set(id, q_record)
+  }
+}
+
+console.log(joinedData.get(2))
+
+
 const router = express.Router();
 
 const rawData = fs.readFileSync(QUESTIONS_FILE_PATH, "utf8");
