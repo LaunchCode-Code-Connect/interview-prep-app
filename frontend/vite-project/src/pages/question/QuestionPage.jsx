@@ -19,6 +19,7 @@ function InterviewQuestion() {
   const [task, setTask] = useState("");
   const [action, setAction] = useState("");
   const [response, setResponse] = useState("");
+  const [notesHidden, setNotesHidden] = useState(false);
 
   // Favorite state
   const [isFavorited, setIsFavorited] = useState(false);
@@ -131,6 +132,7 @@ function InterviewQuestion() {
   const handleReadyToAnswer = () => {
     handleSpeak();
     setShowRecorder(true);
+    setNotesHidden(true)
   };
 
   /* ---------- Save STAR Text ---------- */
@@ -238,7 +240,9 @@ function InterviewQuestion() {
             onChange={handleToggleFavorite}
           />
         </div>
-        <label className="fw-bold">Do I feel prepared for this question? </label>
+        <label className="fw-bold">
+          Do I feel prepared for this question?{" "}
+        </label>
         <div className="form-check form-switch">
           <input
             className="form-check-input"
@@ -250,67 +254,73 @@ function InterviewQuestion() {
           />
         </div>
       </div>
-      <h4 className="mb-2 mt-4">STAR Based Notes:</h4>
-      <div className="row g-3">
-        <div className="col-md-6">
-          <label htmlFor="situation" className="form-label">
-            Situation
-          </label>
-          <textarea
-            id="situation"
-            className="form-control"
-            rows="4"
-            value={situation}
-            onChange={(e) => setSituation(e.target.value)}
-          />
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="task" className="form-label">
-            Task
-          </label>
-          <textarea
-            id="task"
-            className="form-control"
-            rows="4"
-            value={task}
-            onChange={(e) => setTask(e.target.value)}
-          />
-        </div>
-      </div>
+      {!notesHidden && (
+        <>
+          <h4 className="mb-2 mt-4">STAR Based Notes:</h4>
+          <div className="row g-3">
+            <div className="col-md-6">
+              <label htmlFor="situation" className="form-label">
+                Situation
+              </label>
+              <textarea
+                id="situation"
+                className="form-control"
+                rows="4"
+                value={situation}
+                onChange={(e) => setSituation(e.target.value)}
+              />
+            </div>
+            <div className="col-md-6">
+              <label htmlFor="task" className="form-label">
+                Task
+              </label>
+              <textarea
+                id="task"
+                className="form-control"
+                rows="4"
+                value={task}
+                onChange={(e) => setTask(e.target.value)}
+              />
+            </div>
+          </div>
 
-      <div className="row g-3 mb-3">
-        <div className="col-md-6">
-          <label htmlFor="action" className="form-label">
-            Action
-          </label>
-          <textarea
-            id="action"
-            className="form-control"
-            rows="4"
-            value={action}
-            onChange={(e) => setAction(e.target.value)}
-          />
-        </div>
-        <div className="col-md-6">
-          <label htmlFor="response" className="form-label">
-            Response
-          </label>
-          <textarea
-            id="response"
-            className="form-control"
-            rows="4"
-            value={response}
-            onChange={(e) => setResponse(e.target.value)}
-          />
-        </div>
-      </div>
+          <div className="row g-3 mb-3">
+            <div className="col-md-6">
+              <label htmlFor="action" className="form-label">
+                Action
+              </label>
+              <textarea
+                id="action"
+                className="form-control"
+                rows="4"
+                value={action}
+                onChange={(e) => setAction(e.target.value)}
+              />
+            </div>
+            <div className="col-md-6">
+              <label htmlFor="response" className="form-label">
+                Response
+              </label>
+              <textarea
+                id="response"
+                className="form-control"
+                rows="4"
+                value={response}
+                onChange={(e) => setResponse(e.target.value)}
+              />
+            </div>
+          </div>
+        </>
+      )}
 
       <div className="mt-3">
-        <button className="btn btn-info me-2" onClick={handleSaveStarText}>
-          Save STAR Notes
-        </button>
+        {!notesHidden && (
+          <button className="btn btn-info me-2" onClick={handleSaveStarText}>
+            Save STAR Notes
+          </button>
+        )}
         <button className="btn btn-success" onClick={handleReadyToAnswer}>
-          Play Question Prompt and Record Response
+          Ready to Practice Response
         </button>
       </div>
 
@@ -320,10 +330,6 @@ function InterviewQuestion() {
             <h5 className="me-3 mb-0">
               Recommended Response Time Limit: {formatTime(timeRemaining)}
             </h5>
-
-            {/* <button className="btn btn-success" onClick={handleReadyToAnswer}>
-            Ready to Record Question Response
-          </button> */}
           </div>
           <div className="d-flex align-items-center mt-3 mb-3">
             <p className="lead me-3 mb-0">
@@ -333,7 +339,7 @@ function InterviewQuestion() {
         </>
       )}
 
-      {showRecorder && <AudioVideoRecorder questionId={question_id} />}
+      {showRecorder && <AudioVideoRecorder questionId={question_id} setNotesHidden={setNotesHidden}/>}
     </div>
   );
 }
@@ -344,7 +350,7 @@ export default InterviewQuestion;
 /*   AudioVideoRecorder w/ MP4 mimeType       */
 /* ------------------------------------------ */
 
-function AudioVideoRecorder({ questionId }) {
+function AudioVideoRecorder({ questionId, setNotesHidden }) {
   const [recordButtonText, setRecordButtonText] = useState(
     "Record Audio/Video Response"
   );
@@ -448,6 +454,7 @@ function AudioVideoRecorder({ questionId }) {
               setRecordButtonText("Record");
               setIsRecordDisabled(false);
               setShowDownload(true);
+              setNotesHidden(false)
             };
 
             return (
