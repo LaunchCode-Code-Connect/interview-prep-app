@@ -14,6 +14,7 @@ const questions = [
     question_area: question_areas[3],
     example_answer:
       "Situation: I created a personal budgeting web app to track expenses. Action: I designed a simple back-end with a relational database, built a front-end interface, and iterated based on feedback from friends. Response: Completing the project sharpened my full-stack skills, and I learned the importance of user-friendly design.",
+    recommended_time_limit: 180
   },
   {
     question_id: 2,
@@ -22,6 +23,7 @@ const questions = [
     question_area: question_areas[3],
     example_answer:
       "Situation: I created a personal budgeting web app to track expenses. Action: I designed a simple back-end with a relational database, built a front-end interface, and iterated based on feedback from friends. Response: Completing the project sharpened my full-stack skills, and I learned the importance of user-friendly design.",
+    recommended_time_limit: 180
   },
 ];
 

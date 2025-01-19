@@ -116,6 +116,7 @@ router.get("/questions/:id", (req, res) => {
   try {
     const { id } = req.params;
     const question_record = qMap.get(Number(id));
+    console.log(question_record)
     if (question_record) {
       return res.send(question_record);
     } else {
@@ -131,11 +132,9 @@ router.get("/questions/:id/notes", (req, res) => {
   try {
     const data = fs.readFileSync(ANSWERS_FILE_PATH, "utf8");
     const answers = JSON.parse(data); // e.g. [1, 2, 5, ...]
-    console.log(answers);
     const answer_record = answers.filter(
       (o) => o["question_id"] === req.params.id
     );
-    console.log(answer_record);
     if (answer_record.length > 0) {
       return res.send(answer_record[0]);
     } else {

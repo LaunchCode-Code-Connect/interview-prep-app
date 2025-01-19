@@ -8,8 +8,9 @@ import { ReactMediaRecorder } from "react-media-recorder";
 function InterviewQuestion() {
   /* ---------- State Variables ---------- */
   const [questionText, setQuestionText] = useState("");
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(null);
+  const [questionRecommendedLimit, setQuestionRecommendedLimit] =
+    useState(null);
   const [showTimer, setShowTimer] = useState(false);
   const [showRecorder, setShowRecorder] = useState(false);
 
@@ -33,20 +34,25 @@ function InterviewQuestion() {
         const questionRes = await fetch(`/api/questions/${qId}`);
         if (!questionRes.ok) throw new Error("Failed to load question data");
         const questionData = await questionRes.json();
-        const qText = questionData.length > 0 ? questionData[0].question_text : ""
+        console.log(questionData);
+        const qText = questionData ? questionData.question_text : "";
+        const qRecommendedLimit = questionData
+          ? questionData["recommended_time_limit"]
+          : 300;
         setQuestionText(qText);
+        setQuestionRecommendedLimit(qRecommendedLimit);
       } catch (error) {
         console.error("Error fetching question:", error);
       }
     };
 
-    const getNotes = async(qId) => {
+    const getNotes = async (qId) => {
       try {
         // 1) Fetch question data from /api/questions/:id
         const res = await fetch(`/api/questions/${qId}/notes`);
         if (!res.ok) throw new Error("Failed to load notes data");
         const data = await res.json();
-        const {action_text, response_text, situation_text, task_text} = data
+        const { action_text, response_text, situation_text, task_text } = data;
         setSituation(situation_text);
         setAction(action_text);
         setTask(task_text);
@@ -54,7 +60,7 @@ function InterviewQuestion() {
       } catch (error) {
         console.error("Error fetching notes:", error);
       }
-    }
+    };
 
     const checkFavorite = async (qId) => {
       try {
@@ -72,7 +78,7 @@ function InterviewQuestion() {
     if (question_id) {
       getQuestion(question_id);
       checkFavorite(question_id);
-      getNotes(question_id)
+      getNotes(question_id);
     }
   }, [question_id]);
 
@@ -95,15 +101,15 @@ function InterviewQuestion() {
   const handleSpeak = () => {
     if (!("speechSynthesis" in window)) {
       alert("Text-to-speech is not supported in this browser.");
+      setShowTimer(true);
+      setTimeRemaining(questionRecommendedLimit); // 5 minutes
       return;
     }
     const utterance = new SpeechSynthesisUtterance(questionText);
-    setIsSpeaking(true);
 
     utterance.onend = () => {
-      setIsSpeaking(false);
       setShowTimer(true);
-      setTimeRemaining(300); // 5 minutes
+      setTimeRemaining(questionRecommendedLimit); // 5 minutes
     };
 
     window.speechSynthesis.speak(utterance);
@@ -111,8 +117,7 @@ function InterviewQuestion() {
 
   /* ---------- "Ready to Answer" ---------- */
   const handleReadyToAnswer = () => {
-    setShowTimer(false);
-    setTimeRemaining(null);
+    handleSpeak();
     setShowRecorder(true);
   };
 
@@ -181,6 +186,11 @@ function InterviewQuestion() {
   return (
     <div className="container my-4">
       {/* Star icon row */}
+     
+
+      <h3 className="mb-3 mt-3">Question Prompt:</h3>
+      <p class="lead mt-3 mb-3">{questionText}</p>
+
       <div className="d-flex justify-content-start mb-2">
         {/* If not favorited => hollow star, if favored => filled star */}
         <button
@@ -190,7 +200,9 @@ function InterviewQuestion() {
             isFavorited ? "Click to remove from favorites" : "Click to favorite"
           }
         >
-          {isFavorited ? "Click to remove this question from favorites " : "Click to favorite this question"}
+          {isFavorited
+            ? "Click to remove this question from favorites "
+            : "Click to favorite this question"}
           <i
             className={`bi ${isFavorited ? "bi-star-fill" : "bi-star"} fs-4`}
             style={{ cursor: "pointer" }}
@@ -199,9 +211,7 @@ function InterviewQuestion() {
         </button>
       </div>
 
-      <h3 className="mb-3">{questionText}</h3>
-
-      <div className="row g-3 mb-3">
+      <div className="row g-3 mt-3 mb-3">
         <div className="col-md-6">
           <label htmlFor="situation" className="form-label">
             Situation
@@ -255,28 +265,32 @@ function InterviewQuestion() {
         </div>
       </div>
 
-      <div className="mb-3">
+      <div className="mt-3 mb-3">
         <button className="btn btn-info me-2" onClick={handleSaveStarText}>
           Save STAR Notes
         </button>
-        <button
-          className="btn btn-primary"
-          onClick={handleSpeak}
-          disabled={isSpeaking}
-        >
-          {isSpeaking ? "Speaking..." : "Read Question and Prepare to Answer"}
+        <button className="btn btn-success" onClick={handleReadyToAnswer}>
+          Play Question Prompt and Record Response
         </button>
       </div>
 
       {showTimer && timeRemaining !== null && timeRemaining >= 0 && (
-        <div className="d-flex align-items-center mb-3">
-          <h5 className="me-3 mb-0">
-            Preparation Time Remaining: {formatTime(timeRemaining)}
-          </h5>
-          <button className="btn btn-success" onClick={handleReadyToAnswer}>
+        <>
+          <div className="d-flex align-items-center mt-5 mb-3">
+            <h5 className="me-3 mb-0">
+              Response Time Limit: {formatTime(timeRemaining)}
+            </h5>
+
+            {/* <button className="btn btn-success" onClick={handleReadyToAnswer}>
             Ready to Record Question Response
-          </button>
-        </div>
+          </button> */}
+          </div>
+          <div className="d-flex align-items-center mt-3 mb-3">
+            <p className="lead me-3 mb-0">
+              After hitting "Record", please wait a few seconds before speaking
+            </p>
+          </div>
+        </>
       )}
 
       {showRecorder && <AudioVideoRecorder questionId={question_id} />}
@@ -291,7 +305,9 @@ export default InterviewQuestion;
 /* ------------------------------------------ */
 
 function AudioVideoRecorder({ questionId }) {
-  const [recordButtonText, setRecordButtonText] = useState("Record Audio/Video Response");
+  const [recordButtonText, setRecordButtonText] = useState(
+    "Record Audio/Video Response"
+  );
   const [isRecordDisabled, setIsRecordDisabled] = useState(false);
 
   const [showPause, setShowPause] = useState(false);
@@ -337,7 +353,7 @@ function AudioVideoRecorder({ questionId }) {
   };
 
   return (
-    <div className="card">
+    <div className=" mt-3 card">
       <div className="card-body">
         <h5 className="card-title mb-3">Video Recording (Audio + Video)</h5>
 
@@ -432,7 +448,7 @@ function AudioVideoRecorder({ questionId }) {
                 {/* STOP BUTTON */}
                 {showStop && (
                   <button className="btn btn-dark me-2" onClick={onStopClick}>
-                    Stop
+                    Stop Recording and View Video
                   </button>
                 )}
 

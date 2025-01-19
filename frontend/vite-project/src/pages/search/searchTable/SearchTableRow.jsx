@@ -17,6 +17,7 @@ function SearchResultTableRows({ data }) {
         key={question_id}
         id={question_id}
         onClick={() => handleRowClick(question_id)}
+        style={{ cursor: "pointer" }}
       >
         <td>{question_id}</td>
         <td>{record[dataFields["question_type"]]}</td>
