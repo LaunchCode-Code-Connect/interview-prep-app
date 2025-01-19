@@ -33,7 +33,8 @@ function InterviewQuestion() {
         const questionRes = await fetch(`/api/questions/${qId}`);
         if (!questionRes.ok) throw new Error("Failed to load question data");
         const questionData = await questionRes.json();
-        setQuestionText(questionData.question_text || "");
+        const qText = questionData.length > 0 ? questionData[0].question_text : ""
+        setQuestionText(qText);
       } catch (error) {
         console.error("Error fetching question:", error);
       }
@@ -172,7 +173,7 @@ function InterviewQuestion() {
             isFavorited ? "Click to remove from favorites" : "Click to favorite"
           }
         >
-          {isFavorited ? "Click to remove from favorites " : "Click to favorite "}
+          {isFavorited ? "Click to remove this question from favorites " : "Click to favorite this question"}
           <i
             className={`bi ${isFavorited ? "bi-star-fill" : "bi-star"} fs-4`}
             style={{ cursor: "pointer" }}
@@ -181,7 +182,7 @@ function InterviewQuestion() {
         </button>
       </div>
 
-      <h3 className="mb-3">{"Perfect"}</h3>
+      <h3 className="mb-3">{questionText}</h3>
 
       <div className="row g-3 mb-3">
         <div className="col-md-6">
@@ -239,24 +240,24 @@ function InterviewQuestion() {
 
       <div className="mb-3">
         <button className="btn btn-info me-2" onClick={handleSaveStarText}>
-          Save STAR Text
+          Save STAR Notes
         </button>
         <button
           className="btn btn-primary"
           onClick={handleSpeak}
           disabled={isSpeaking}
         >
-          {isSpeaking ? "Speaking..." : "Read Question Aloud"}
+          {isSpeaking ? "Speaking..." : "Read Question and Prepare to Answer"}
         </button>
       </div>
 
       {showTimer && timeRemaining !== null && timeRemaining >= 0 && (
         <div className="d-flex align-items-center mb-3">
           <h5 className="me-3 mb-0">
-            Time Remaining: {formatTime(timeRemaining)}
+            Preparation Time Remaining: {formatTime(timeRemaining)}
           </h5>
           <button className="btn btn-success" onClick={handleReadyToAnswer}>
-            Ready to Answer Question
+            Ready to Record Question Response
           </button>
         </div>
       )}
@@ -273,7 +274,7 @@ export default InterviewQuestion;
 /* ------------------------------------------ */
 
 function AudioVideoRecorder({ questionId }) {
-  const [recordButtonText, setRecordButtonText] = useState("Record");
+  const [recordButtonText, setRecordButtonText] = useState("Record Audio/Video Response");
   const [isRecordDisabled, setIsRecordDisabled] = useState(false);
 
   const [showPause, setShowPause] = useState(false);
