@@ -11,13 +11,13 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [data, setData] = useState([]);
-  const handleSearch = async (filterType, keyword) => {
+  const handleSearch = async (filterType) => {
     setLoading(true);
     setData([]);
     setErrorMsg("");
 
     try {
-      const data = await getSearchResults(filterType, keyword);
+      const data = await getSearchResults(filterType);
       setData(data);
     } catch (error) {
       setErrorMsg(error.message);
