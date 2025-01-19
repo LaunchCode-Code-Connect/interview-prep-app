@@ -25,15 +25,10 @@ const questions = [
   },
 ];
 
-// for (let i = 2; i <= 100; i++) {
-//   questions.push({
-//     question_id: i,
-//     question_text: "Filler",
-//     question_type: "Technical",
-//     question_area: question_areas[2],
-//     example_answer:
-//      "Example answer"
-//   });
-// }
+const qMap = new Map()
 
-module.exports = questions;
+for (let q of questions){
+  qMap.set(Number(q["question_id"]), q)
+}
+
+module.exports = qMap;
