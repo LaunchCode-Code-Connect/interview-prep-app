@@ -2,7 +2,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const { getQMap } = require("./questions");
+const question_records = require("./questions");
 
 const router = express.Router();
 
@@ -45,9 +45,8 @@ router.get("/search", (req, res) => {
     // }
 
     // Return the records as JSON
-    const qMap = getQMap();
-    let records = convertInMemMapToRecords(qMap);
     const { type } = req.query;
+    let records = question_records;
     if (type) {
       if (type === "favorites") {
         records = records.filter((r) => r["is_favorite"] === true);
@@ -61,7 +60,7 @@ router.get("/search", (req, res) => {
 });
 
 // Example route to save data
-router.post("/save-star", (req, res) => {
+router.post("/save-notes", (req, res) => {
   try {
     // 1) Read existing JSON
     let rawData = fs.readFileSync(ANSWERS_FILE_PATH, "utf8");
@@ -114,17 +113,33 @@ router.post("/save-star", (req, res) => {
 
 router.get("/questions/:id", (req, res) => {
   try {
-    const id = Number(req.params.id);
-    const qMap = getQMap();
-    const question_record = qMap.get(id);
-    if (question_record) {
-      return res.send(question_record);
+    const {id} = req.params;
+    const question_record = question_records.filter(o => o["question_id"] === id)
+    if (question_record.length > 0) {
+      return res.send(question_record[0]);
     } else {
       res.send({});
     }
   } catch (error) {
     console.error("Error reading JSON file:", error);
     res.status(500).json({ error: "Could not retrieve records." });
+  }
+});
+
+router.get("/questions/:id/notes", (req, res) => {
+  try {
+    const question_id = parseInt(req.params.id, 10);
+    const data = fs.readFileSync(ANSWERS_FILE_PATH, "utf8");
+    const answers = JSON.parse(data); // e.g. [1, 2, 5, ...]
+    const answer_record = answers.filter(o => o["question_id"] === question_id)
+    if (answer_record.length > 0) {
+      return res.send(answer_record[0]);
+    } else {
+      res.send({});
+    }
+  } catch (err) {
+    console.error("Error reading favorites:", err);
+    res.status(500).json({ error: "Could not read favorites" });
   }
 });
 
