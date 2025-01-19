@@ -17,3 +17,4 @@ export async function getSearchResults(questionType) {
     return json;
   }
 }
+

@@ -4,13 +4,15 @@ import SearchPage from "./pages/search/SearchPage";
 import AboutPage from "./pages/about/AboutPage";
 import NotFound from "./pages/404/NotFound";
 import { getSearchResults } from "./api/search";
+import { getQuestionsLeft } from "./api/completed";
 import InterviewQuestion from "./pages/question/QuestionPage";
-import "./App.css"
+import "./App.css";
 
 function App() {
   const [loading, setLoading] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [data, setData] = useState([]);
+  const [questionsLeftToPrep, setQuestionsToPrep] = useState([]);
   const handleSearch = async (filterType) => {
     setLoading(true);
     setData([]);
@@ -18,7 +20,10 @@ function App() {
 
     try {
       const data = await getSearchResults(filterType);
+      const {q_left} = await getQuestionsLeft();
+      console.log(q_left)
       setData(data);
+      setQuestionsToPrep(q_left)
     } catch (error) {
       setErrorMsg(error.message);
     } finally {
@@ -26,26 +31,28 @@ function App() {
     }
   };
 
-   useEffect(() => {
-      const getResults= async () => {
-        try {
-          // Example: /api/questions/:id
-          const res = await fetch(`/api/search/`);
-          if (!res.ok) {
-            throw new Error("Failed to load question data");
-          }
-          const data = await res.json();
-          setData(data)
-          // data might be { question_id: '123', question_text: '...' }
-  
-        } catch (error) {
-          console.error("Error fetching questions:", error);
+  useEffect(() => {
+    const getResults = async () => {
+      try {
+        // Example: /api/questions/:id
+        const res = await fetch(`/api/search/`);
+        if (!res.ok) {
+          throw new Error("Failed to load question data");
         }
-      };
-  
-      // Call the function to fetch question data
-      getResults()
-    }, []);
+        const data = await res.json();
+        const {q_left} = await getQuestionsLeft();
+        console.log(q_left)
+        setData(data);
+        setQuestionsToPrep(q_left)
+        // data might be { question_id: '123', question_text: '...' }
+      } catch (error) {
+        console.error("Error fetching questions:", error);
+      }
+    };
+
+    // Call the function to fetch question data
+    getResults();
+  }, []);
 
   return (
     <div>
@@ -53,6 +60,7 @@ function App() {
         <Link className="navbar-brand ms-4 nav-link" to="/">
           Behavioral Interview Prep
         </Link>
+
         <button
           className="navbar-toggler"
           type="button"
@@ -86,10 +94,14 @@ function App() {
               data={data}
               errorMsg={errorMsg}
               handleSearch={handleSearch}
+              qLeftToPrep={questionsLeftToPrep}
             />
           }
         />
-        <Route path="/question/:id" element={<InterviewQuestion questions={data}/>}/>
+        <Route
+          path="/question/:id"
+          element={<InterviewQuestion questions={data} />}
+        />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </div>

@@ -16,6 +16,25 @@ const ANSWERS_FILE_PATH = path.join(
 
 const FAVORITES_FILE = path.join(__dirname, "user-data", "user-favorites.json");
 
+const PREPPED_FILE_PATH = path.join(
+  __dirname,
+  "user-data",
+  "user-prepped.json"
+);
+
+router.get("/completed", (req, res) => {
+  try {
+    let data = fs.readFileSync(PREPPED_FILE_PATH, "utf8");
+    let prepped_questions = JSON.parse(data);
+    const questions_left_to_prep = qMap.size - prepped_questions.length;
+    console.log(questions_left_to_prep);
+    res.json({ q_left: questions_left_to_prep });
+  } catch (error) {
+    console.error("Error Compiling Metrics:", error);
+    res.status(500).json({ error: "Could not retrieve records." });
+  }
+});
+
 router.get("/search", (req, res) => {
   try {
     // Read JSON file from disk
@@ -46,11 +65,11 @@ router.get("/search", (req, res) => {
       if (type === "favorites") {
         let data = fs.readFileSync(FAVORITES_FILE, "utf8");
         let favorites = JSON.parse(data);
-        let fav_records = []
+        let fav_records = [];
         for (let id of favorites) {
-          fav_records.push(qMap.get(Number(id)))
+          fav_records.push(qMap.get(Number(id)));
         }
-        records = fav_records
+        records = fav_records;
       }
     }
     res.json(records);
@@ -116,7 +135,6 @@ router.get("/questions/:id", (req, res) => {
   try {
     const { id } = req.params;
     const question_record = qMap.get(Number(id));
-    console.log(question_record)
     if (question_record) {
       return res.send(question_record);
     } else {
@@ -185,6 +203,48 @@ router.post("/questions/:id/favorite", (req, res) => {
   } catch (err) {
     console.error("Error updating favorites:", err);
     res.status(500).json({ error: "Could not update favorites" });
+  }
+});
+
+router.get("/questions/:id/prepped", (req, res) => {
+  try {
+    const question_id = parseInt(req.params.id, 10);
+    const data = fs.readFileSync(PREPPED_FILE_PATH, "utf8");
+    const prepped = JSON.parse(data); // e.g. [1, 2, 5, ...]
+    const isPrepped = prepped.includes(question_id);
+    res.json({ isPrepped });
+  } catch (err) {
+    console.error("Error reading prepped:", err);
+    res.status(500).json({ error: "Could not read prepped" });
+  }
+});
+
+router.post("/questions/:id/prepped", (req, res) => {
+  try {
+    const question_id = parseInt(req.params.id, 10);
+    const { prepped } = req.body; // true => add, false => remove
+    let data = fs.readFileSync(PREPPED_FILE_PATH, "utf8");
+    let prepped_questions = JSON.parse(data);
+
+    if (prepped) {
+      // Add if not already present
+      if (!prepped_questions.includes(question_id)) {
+        prepped_questions.push(question_id);
+      }
+    } else {
+      // Remove if present
+      prepped_questions = prepped_questions.filter((id) => id !== question_id);
+    }
+
+    fs.writeFileSync(
+      PREPPED_FILE_PATH,
+      JSON.stringify(prepped_questions, null, 2),
+      "utf8"
+    );
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error updating prepped questions:", err);
+    res.status(500).json({ error: "Could not update prepped questions" });
   }
 });
 

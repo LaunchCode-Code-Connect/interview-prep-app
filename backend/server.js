@@ -19,6 +19,12 @@ const ANSWERS_FILE_PATH = path.join(
 
 const FAVORITES_FILE = path.join(__dirname, "user-data", "user-favorites.json");
 
+const PREPPED_FILE_PATH = path.join(
+  __dirname,
+  "user-data",
+  "user-prepped.json"
+);
+
 if (!fs.existsSync(USER_DATA_DIR)) {
   fs.mkdirSync(USER_DATA_DIR);
   console.log(`Directory '${USER_DATA_DIR}' created.`);
@@ -28,6 +34,9 @@ if (!fs.existsSync(FAVORITES_FILE)) {
 }
 if (!fs.existsSync(ANSWERS_FILE_PATH)) {
   fs.writeFileSync(ANSWERS_FILE_PATH, "[]", "utf8");
+}
+if (!fs.existsSync(PREPPED_FILE_PATH)) {
+  fs.writeFileSync(PREPPED_FILE_PATH, "[]", "utf8");
 }
 
 app.get("/", (req, res, next) => {

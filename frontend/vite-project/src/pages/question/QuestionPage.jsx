@@ -22,6 +22,7 @@ function InterviewQuestion() {
 
   // Favorite state
   const [isFavorited, setIsFavorited] = useState(false);
+  const [isPrepped, setIsPrepped] = useState(false);
 
   // param from URL
   const { id: question_id } = useParams();
@@ -75,9 +76,21 @@ function InterviewQuestion() {
       }
     };
 
+    const checkPrepped = async (qId) => {
+      try {
+        const prepRes = await fetch(`/api/questions/${qId}/prepped`);
+        if (!prepRes.ok) throw new Error("Failed to check prepped status");
+        const prepData = await prepRes.json();
+        setIsPrepped(prepData.isPrepped || false);
+      } catch (error) {
+        console.error("Error fetching favorite status:", error);
+      }
+    };
+
     if (question_id) {
       getQuestion(question_id);
       checkFavorite(question_id);
+      checkPrepped(question_id);
       getNotes(question_id);
     }
   }, [question_id]);
@@ -183,35 +196,63 @@ function InterviewQuestion() {
     }
   };
 
+  const handleTogglePrepped = async () => {
+    if (!question_id) return;
+
+    const newPreppedState = !isPrepped;
+    // Update local UI state immediately
+    setIsPrepped(newPreppedState);
+
+    try {
+      const res = await fetch(`/api/questions/${question_id}/prepped`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prepped: newPreppedState }),
+      });
+      if (!res.ok) {
+        throw new Error("Failed to update favorite status on server");
+      }
+    } catch (error) {
+      console.error("Error toggling favorite status:", error);
+      // Revert local state if the server call fails
+      setIsPrepped(!newPreppedState);
+      alert("Unable to update favorite status. Please try again.");
+    }
+  };
+
   return (
     <div className="container my-4">
       {/* Star icon row */}
-     
 
-      <h3 className="mb-3 mt-3">Question Prompt:</h3>
-      <p class="lead mt-3 mb-3">{questionText}</p>
+      <h4 className="mb-2 mt-2">Interview Question:</h4>
+      <p className="lead mt-2 mb-2">{questionText}</p>
 
-      <div className="d-flex justify-content-start mb-2">
-        {/* If not favorited => hollow star, if favored => filled star */}
-        <button
-          className={`btn btn-info`}
-          onClick={handleToggleFavorite}
-          title={
-            isFavorited ? "Click to remove from favorites" : "Click to favorite"
-          }
-        >
-          {isFavorited
-            ? "Click to remove this question from favorites "
-            : "Click to favorite this question"}
-          <i
-            className={`bi ${isFavorited ? "bi-star-fill" : "bi-star"} fs-4`}
-            style={{ cursor: "pointer" }}
-            onClick={handleToggleFavorite}
-          ></i>
-        </button>
+      <div className="d-flex align-items-left">
+        <label className="fw-bold">Favorite this Question? </label>
+        <div className="form-check form-switch">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="favoritedToggle"
+            checked={isFavorited}
+            onChange={handleToggleFavorite}
+          />
+        </div>
+        <label className="fw-bold">Do I feel prepared for this question? </label>
+        <div className="form-check form-switch">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="preparedToggle"
+            checked={isPrepped}
+            onChange={handleTogglePrepped}
+          />
+        </div>
       </div>
-
-      <div className="row g-3 mt-3 mb-3">
+      <h4 className="mb-2 mt-4">STAR Based Notes:</h4>
+      <div className="row g-3">
         <div className="col-md-6">
           <label htmlFor="situation" className="form-label">
             Situation
@@ -265,7 +306,7 @@ function InterviewQuestion() {
         </div>
       </div>
 
-      <div className="mt-3 mb-3">
+      <div className="mt-3">
         <button className="btn btn-info me-2" onClick={handleSaveStarText}>
           Save STAR Notes
         </button>
@@ -276,9 +317,9 @@ function InterviewQuestion() {
 
       {showTimer && timeRemaining !== null && timeRemaining >= 0 && (
         <>
-          <div className="d-flex align-items-center mt-5 mb-3">
+          <div className="d-flex align-items-center mt-3 mb-3">
             <h5 className="me-3 mb-0">
-              Response Time Limit: {formatTime(timeRemaining)}
+              Recommended Response Time Limit: {formatTime(timeRemaining)}
             </h5>
 
             {/* <button className="btn btn-success" onClick={handleReadyToAnswer}>

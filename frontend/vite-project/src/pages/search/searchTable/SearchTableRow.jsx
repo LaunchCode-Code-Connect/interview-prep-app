@@ -9,9 +9,7 @@ function SearchResultTableRows({ data }) {
     navigate(`/question/${id}`);
   };
   return data.map((record) => {
-    console.log(record)
     const { question_id } = record;
-    console.log(question_id)
     return (
       <tr
         key={question_id}
