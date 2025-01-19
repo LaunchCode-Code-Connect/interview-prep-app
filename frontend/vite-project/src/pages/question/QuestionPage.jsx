@@ -385,7 +385,7 @@ function AudioVideoRecorder({ questionId, setNotesHidden }) {
         const dateTime = `${mm}-${dd}-${yyyy}_${hh}:${min}:${ss}`;
 
         // e.g. LaunchCode-Question-123-response-07-12-2023_14:35:10.mp4
-        const filename = `LaunchCode-Question-${questionId}-response-${dateTime}.mp4`;
+        const filename = `LaunchCode-Question-${questionId}-response-${dateTime}.webm`;
 
         const a = document.createElement("a");
         a.href = url;
@@ -406,7 +406,7 @@ function AudioVideoRecorder({ questionId, setNotesHidden }) {
         <ReactMediaRecorder
           audio
           video
-          mimeType="video/mp4"
+          mimeType="video/webm"
           render={({
             status,
             startRecording,
