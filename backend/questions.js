@@ -25,5 +25,11 @@ const questions = [
   },
 ];
 
+const qMap = new Map()
+for (let q of questions){
+  const id = Number(q["question_id"]);
+  qMap.set(id, q)
+}
 
-module.exports = questions
+
+module.exports = qMap

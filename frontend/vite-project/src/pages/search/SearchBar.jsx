@@ -2,10 +2,7 @@ import { useState } from "react";
 import Select from "../../components/Select";
 
 export default function SearchBar({ onSearch }) {
-  const filterTypeOptions = [
-    "all",
-    "favorites"
-  ];
+  const filterTypeOptions = ["all", "favorites"];
   const [filterType, setFilterType] = useState(filterTypeOptions[0]);
 
   return (
@@ -16,7 +13,7 @@ export default function SearchBar({ onSearch }) {
           onSearch(filterType);
         }}
       >
-        <div className="input-group">
+        <div className="input-group mb-3 mt-3">
           <Select
             label={"Select questions area"}
             options={filterTypeOptions}

@@ -2,7 +2,7 @@
 const express = require("express");
 const fs = require("fs");
 const path = require("path");
-const question_records = require("./questions");
+const qMap = require("./questions");
 
 const router = express.Router();
 
@@ -15,14 +15,6 @@ const ANSWERS_FILE_PATH = path.join(
 );
 
 const FAVORITES_FILE = path.join(__dirname, "user-data", "user-favorites.json");
-
-const convertInMemMapToRecords = (qMap) => {
-  const records = [];
-  for (const [key, value] of qMap) {
-    records.push(value);
-  }
-  return records;
-};
 
 router.get("/search", (req, res) => {
   try {
@@ -46,10 +38,19 @@ router.get("/search", (req, res) => {
 
     // Return the records as JSON
     const { type } = req.query;
-    let records = question_records;
+    let records = [];
+    for (let [key, value] of qMap.entries()) {
+      records.push(value);
+    }
     if (type) {
       if (type === "favorites") {
-        records = records.filter((r) => r["is_favorite"] === true);
+        let data = fs.readFileSync(FAVORITES_FILE, "utf8");
+        let favorites = JSON.parse(data);
+        let fav_records = []
+        for (let id of favorites) {
+          fav_records.push(qMap.get(Number(id)))
+        }
+        records = fav_records
       }
     }
     res.json(records);
@@ -113,10 +114,10 @@ router.post("/save-notes", (req, res) => {
 
 router.get("/questions/:id", (req, res) => {
   try {
-    const {id} = req.params;
-    const question_record = question_records.filter(o => o["question_id"] === id)
-    if (question_record.length > 0) {
-      return res.send(question_record[0]);
+    const { id } = req.params;
+    const question_record = qMap.get(Number(id));
+    if (question_record) {
+      return res.send(question_record);
     } else {
       res.send({});
     }
@@ -130,9 +131,11 @@ router.get("/questions/:id/notes", (req, res) => {
   try {
     const data = fs.readFileSync(ANSWERS_FILE_PATH, "utf8");
     const answers = JSON.parse(data); // e.g. [1, 2, 5, ...]
-    console.log(answers)
-    const answer_record = answers.filter(o => o["question_id"] === req.params.id)
-    console.log(answer_record)
+    console.log(answers);
+    const answer_record = answers.filter(
+      (o) => o["question_id"] === req.params.id
+    );
+    console.log(answer_record);
     if (answer_record.length > 0) {
       return res.send(answer_record[0]);
     } else {
