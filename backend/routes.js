@@ -27,7 +27,6 @@ router.get("/completed", (req, res) => {
     let data = fs.readFileSync(PREPPED_FILE_PATH, "utf8");
     let prepped_questions = JSON.parse(data);
     const questions_left_to_prep = qMap.size - prepped_questions.length;
-    console.log(questions_left_to_prep);
     res.json({ q_left: questions_left_to_prep });
   } catch (error) {
     console.error("Error Compiling Metrics:", error);

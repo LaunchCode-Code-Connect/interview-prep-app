@@ -21,7 +21,6 @@ function App() {
     try {
       const data = await getSearchResults(filterType);
       const {q_left} = await getQuestionsLeft();
-      console.log(q_left)
       setData(data);
       setQuestionsToPrep(q_left)
     } catch (error) {
@@ -41,7 +40,6 @@ function App() {
         }
         const data = await res.json();
         const {q_left} = await getQuestionsLeft();
-        console.log(q_left)
         setData(data);
         setQuestionsToPrep(q_left)
         // data might be { question_id: '123', question_text: '...' }

@@ -35,7 +35,6 @@ function InterviewQuestion() {
         const questionRes = await fetch(`/api/questions/${qId}`);
         if (!questionRes.ok) throw new Error("Failed to load question data");
         const questionData = await questionRes.json();
-        console.log(questionData);
         const qText = questionData ? questionData.question_text : "";
         const qRecommendedLimit = questionData
           ? questionData["recommended_time_limit"]
